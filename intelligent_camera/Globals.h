@@ -1,7 +1,5 @@
 #pragma once
 
-#include <GLFW\glfw3.h>
-
 extern char keys[1024];
 extern char mouse_buttons[8];
 extern char mods;

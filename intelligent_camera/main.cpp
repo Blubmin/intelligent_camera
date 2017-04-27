@@ -1,11 +1,14 @@
 #include <iostream>
 
+// #include "imgui_impl_glfw_gl3.h"
 #include <GL\glew.h>
 #include <GLFW\glfw3.h>
 #include <glm\glm.hpp>
 
-#include "Globals.h"
+#include "..\imgui\imgui.h"
 #include "imgui_impl_glfw_gl3.h"
+
+#include "Globals.h"
 #include "ModelLoader.h"
 #include "World.h"
 
@@ -97,7 +100,7 @@ void run()
     // GLEW throws some errors, so discard all the errors so far
     while (glGetError() != GL_NO_ERROR) {}
 
-    ImGui_ImplGlfwGL3_Init(window, true);
+    ImGui_ImplGlfwGL3_Init(window, false);
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);

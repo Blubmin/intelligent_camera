@@ -13,9 +13,6 @@
 using namespace rapidjson;
 using namespace std;
 
-int cur_frame;
-int total_frames;
-
 PlayerMovementSystem::PlayerMovementSystem() {}
 
 PlayerMovementSystem::PlayerMovementSystem(string filename) {
