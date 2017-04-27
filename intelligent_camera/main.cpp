@@ -99,6 +99,8 @@ void run()
 
     glDisable(GL_BLEND);
     glClearColor(100 / 255.f, 149 / 255.f, 237 / 255.f, 1.0f);
+    
+    glfwSwapInterval(.5);
 
     shared_ptr<World> world = make_shared<World>();
     world->init();

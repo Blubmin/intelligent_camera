@@ -8,6 +8,7 @@ class DebugCamera : public Camera
 {
 public:
     DebugCamera();
+    DebugCamera(glm::vec3 starting_pos);
     ~DebugCamera();
 
     void update(double elapsedTime);

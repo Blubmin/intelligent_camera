@@ -1,9 +1,12 @@
 #include "RenderingSystem.h"
 
+#include <iostream>
+
 #include <glm\gtc\matrix_transform.hpp>
 #include <glm\gtc\type_ptr.hpp>
 
 #include "GLSL.h"
+#include "Player.h"
 #include "Position.h"
 #include "Rotation.h"
 #include "Scale.h"
@@ -51,18 +54,23 @@ void RenderingSystem::drawEntities(shared_ptr<World> world)
             continue;
 
         glUniformMatrix4fv(this->phong.getUniformHandle("uModelMatrix"), 1, GL_FALSE, value_ptr(getModelMatrix(entity)));
-        glUniform3f(this->phong.getUniformHandle("uLightPos"), 50, 50, 50);
+        glUniform3f(this->phong.getUniformHandle("uLightPos"), 50, 5000, 50);
 
         shared_ptr<Model> model = dynamic_pointer_cast<Model>(entity->getComponent(COMPONENT_MODEL));
         for (int j = 0; j < model->meshes.size(); j++)
         {
             Mesh mesh = model->meshes.at(j);
 
-            bindMaterial(model->materials[mesh.materialIdx]);
+            if (entity->mask & COMPONENT_PLAYER == COMPONENT_PLAYER) {
+                shared_ptr<Player> player = dynamic_pointer_cast<Player>(entity->getComponent(COMPONENT_PLAYER));
+                glUniform3fv(this->phong.getUniformHandle("uDiffuseColor"), 1, value_ptr(player->get_color()));
+            }
+            else {
+                bindMaterial(model->materials[mesh.materialIdx]);
+            }
 
             glBindVertexArray(mesh.VAO);
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.IND);
-            glDrawElements(GL_TRIANGLES, mesh.indices.size(), GL_UNSIGNED_INT, 0);
+            glDrawArrays(GL_TRIANGLES, 0, mesh.indices.size());
             glBindVertexArray(0);
         }
     }
@@ -98,16 +106,14 @@ void RenderingSystem::bindMaterial(Material material)
 
 void RenderingSystem::bindGrid()
 {
+    int grid_max = 100;
+    int step = 10;
     this->grid_points = vector<vec3>();
-    for (int i = 0; i < 9; i++) {
-        grid_idx.push_back(grid_points.size());
+    for (int i = 0; i <= grid_max; i += step) {
         grid_points.push_back(vec3(i, 0, 0));
-        grid_idx.push_back(grid_points.size());
-        grid_points.push_back(vec3(i, 0, 9));
-        grid_idx.push_back(grid_points.size());
+        grid_points.push_back(vec3(i, 0, grid_max));
         grid_points.push_back(vec3(0, 0, i));
-        grid_idx.push_back(grid_points.size());
-        grid_points.push_back(vec3(9, 0, i));
+        grid_points.push_back(vec3(grid_max, 0, i));
     }
 
     glGenVertexArrays(1, &GRID_VAO);
@@ -120,11 +126,6 @@ void RenderingSystem::bindGrid()
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-    glGenBuffers(1, &GRID_IDX);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, GRID_IDX);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER,
-        grid_idx.size()*sizeof(GLuint), &grid_idx[0], GL_STATIC_DRAW);
-
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -135,13 +136,12 @@ void RenderingSystem::drawGrid(shared_ptr<World> world)
     glUseProgram(this->grid.prog);
 
     mat4 viewMat = world->camera.getViewMatrix();
-    glUniformMatrix4fv(this->phong.getUniformHandle("uViewMatrix"), 1, GL_FALSE, value_ptr(viewMat));
-    glUniformMatrix4fv(this->phong.getUniformHandle("uProjMatrix"), 1, GL_FALSE, value_ptr(this->projection));
-    glUniformMatrix4fv(this->phong.getUniformHandle("uModelMatrix"), 1, GL_FALSE, value_ptr(mat4()));
+    glUniformMatrix4fv(this->grid.getUniformHandle("uViewMatrix"), 1, GL_FALSE, value_ptr(viewMat));
+    glUniformMatrix4fv(this->grid.getUniformHandle("uProjMatrix"), 1, GL_FALSE, value_ptr(this->projection));
+    glUniformMatrix4fv(this->grid.getUniformHandle("uModelMatrix"), 1, GL_FALSE, value_ptr(mat4()));
 
     glBindVertexArray(GRID_VAO);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, GRID_IDX);
-    glDrawElements(GL_LINES, grid_points.size(), GL_UNSIGNED_INT, 0);
+    glDrawArrays(GL_LINES, 0, this->grid_points.size());
     glBindVertexArray(0);
 
     glUseProgram(0);

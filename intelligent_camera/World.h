@@ -4,9 +4,11 @@
 #include <vector>
 
 #include "SplineCamera.h"
+#include "DebugCamera.h"
 #include "Entity.h"
 #include "EntityFactory.h"
 #include "RenderingSystem.h"
+#include "PlayerMovementSystem.h"
 
 class World : public std::enable_shared_from_this<World>
 {
@@ -19,7 +21,9 @@ public:
 
     std::vector<std::shared_ptr<Entity>> entities;
     EntityFactory factory;
-    SplineCamera camera;
+    // SplineCamera camera;
+    DebugCamera camera;
     RenderingSystem renderer;
+    PlayerMovementSystem movement;
 };
 

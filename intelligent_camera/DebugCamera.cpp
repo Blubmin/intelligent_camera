@@ -6,14 +6,16 @@
 
 using namespace glm;
 
-DebugCamera::DebugCamera()
+DebugCamera::DebugCamera() {}
+
+DebugCamera::DebugCamera(vec3 starting_pos)
 {
     theta = 0.0f;
     phi = 0.0f;
-    pos = vec3(0.0f, 0.0f, 20.0f);
-    frontVec = vec3(0.0f, 0.0f, -1.0f);
+    pos = starting_pos;
+    frontVec = -normalize(starting_pos);
     upVec = vec3(0.0f, 1.0f, 0.0f);
-    speed = 10;
+    speed = 40;
     rotationSpeed = 0.1;
 }
 

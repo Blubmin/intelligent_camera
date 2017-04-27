@@ -14,7 +14,7 @@ Entity::~Entity()
 
 void Entity::addComponent(std::shared_ptr<Component> component)
 {
-    mask &= component->mask;
+    mask |= component->mask;
     this->components[component->mask] = component;
 }
 

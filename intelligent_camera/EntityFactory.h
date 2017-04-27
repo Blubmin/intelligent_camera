@@ -15,6 +15,7 @@ public:
 
     void createBoid(std::shared_ptr<World> world, float x, float y, float z);
     void createTree(std::shared_ptr<World> world, float x, float y, float z);
+    void createPlayer(std::shared_ptr<World> world, float x, float y, float z, int label);
 
 private:
     ModelLoader ldr;

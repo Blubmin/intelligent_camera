@@ -18,5 +18,5 @@ void main()
 
 	//vec3 specular = uSpecularColor * max(0.0, pow(dot(normalize(vNormal), normalize(vLight)), uShininess));
 	vec3 diffuse = uDiffuseColor * max(0.0, dot(normalize(vNormal), normalize(vLight)));
-	finalColor = vec4((diffuse + uDiffuseColor) * 2, 1);
+	finalColor = vec4(diffuse, 1);
 }
