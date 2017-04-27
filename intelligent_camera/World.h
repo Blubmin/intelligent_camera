@@ -3,7 +3,7 @@
 #include <memory>
 #include <vector>
 
-#include "Camera.h"
+#include "SplineCamera.h"
 #include "Entity.h"
 #include "EntityFactory.h"
 #include "RenderingSystem.h"
@@ -19,7 +19,7 @@ public:
 
     std::vector<std::shared_ptr<Entity>> entities;
     EntityFactory factory;
-    Camera camera;
+    SplineCamera camera;
     RenderingSystem renderer;
 };
 

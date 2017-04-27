@@ -1,5 +1,7 @@
 #include "Mesh.h"
 
+#include <climits>
+
 using namespace glm;
 using namespace std;
 
@@ -9,14 +11,15 @@ Mesh::Mesh()
 
 Mesh::Mesh(const aiMesh* mesh)
 {
-    this->data = vector<vec3>();
+    this->verts = vector<vec3>();
 
     for (int i = 0; i < mesh->mNumVertices; i++)
     {
-        VertexData vert = VertexData();
         aiVector3D pos = mesh->mVertices[i];
-        vert.pos = vec3(pos.x, pos.y, pos.z);
-        this->data.push_back(vert.pos);
+        this->verts.push_back(vec3(pos.x, pos.y, pos.z));
+
+        aiVector3D norm = mesh->mNormals[i];
+        this->norms.push_back(vec3(norm.x, norm.y, norm.z));
     }
 
     for (int i = 0; i < mesh->mNumFaces; i++) {
@@ -26,7 +29,7 @@ Mesh::Mesh(const aiMesh* mesh)
         }
     }
 
-    bindBuffers();
+    materialIdx = mesh->mMaterialIndex;
 }
 
 Mesh::~Mesh()
@@ -38,20 +41,26 @@ void Mesh::bindBuffers()
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
 
-    glGenBuffers(1, &VBO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, data.size()*sizeof(vec3),
-        &data[0], GL_STATIC_DRAW);
+    glGenBuffers(1, &VBO_VERT);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO_VERT);
+    glBufferData(GL_ARRAY_BUFFER, verts.size()*sizeof(vec3),
+        &verts[0], GL_STATIC_DRAW);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+    glGenBuffers(1, &VBO_NORM);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO_NORM);
+    glBufferData(GL_ARRAY_BUFFER, norms.size()*sizeof(vec3),
+        &norms[0], GL_STATIC_DRAW);
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
     glGenBuffers(1, &IND);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IND);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER,
         indices.size()*sizeof(GLuint), &indices[0], GL_STATIC_DRAW);
 
+    glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-    glBindVertexArray(0);
 }

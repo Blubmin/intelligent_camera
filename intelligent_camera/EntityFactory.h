@@ -13,7 +13,8 @@ public:
     EntityFactory();
     ~EntityFactory();
 
-    void createTree(std::shared_ptr<World> world);
+    void createBoid(std::shared_ptr<World> world, float x, float y, float z);
+    void createTree(std::shared_ptr<World> world, float x, float y, float z);
 
 private:
     ModelLoader ldr;

@@ -6,25 +6,26 @@
 #include <GL\glew.h>
 #include <glm\glm.hpp>
 
-struct VertexData {
-    glm::vec3 pos;
-};
-
 class Mesh
 {
 public:
     Mesh();
     Mesh(const aiMesh* scene);
-    ~Mesh();
+    ~Mesh();    
 
-    std::vector<glm::vec3> data;
+    void bindBuffers();
+
+    std::vector<glm::vec3> verts;
+    std::vector<glm::vec3> norms;
     std::vector<GLuint> indices;
+    unsigned int materialIdx;
 
     GLuint VAO;
-    GLuint VBO;
+    GLuint VBO_VERT;
+    GLuint VBO_NORM;
     GLuint IND;
 
 private:
-    void bindBuffers();
+    
 };
 

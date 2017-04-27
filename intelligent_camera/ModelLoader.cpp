@@ -28,8 +28,8 @@ shared_ptr<Model> ModelLoader::loadModelByName(const string& filename, string ke
         aiProcess_CalcTangentSpace |
         aiProcess_Triangulate |
         aiProcess_JoinIdenticalVertices |
-        aiProcess_SortByPType);
-
+        aiProcess_GenSmoothNormals);
+     
     shared_ptr<Model> model = make_shared<Model>(Model(scene));
     this->models[key] = model;
     return model;

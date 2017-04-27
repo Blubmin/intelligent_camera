@@ -8,12 +8,7 @@ public:
     Camera();
     ~Camera();
 
-    glm::mat4 getViewMatrix();
-
-    glm::vec3 pos;
-    glm::vec3 upVec;
-    glm::vec3 frontVec;
-    float theta;
-    float phi;
+    virtual void update(double timeElapsed) = 0;
+    virtual glm::mat4 getViewMatrix() = 0;
 };
 
