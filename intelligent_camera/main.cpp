@@ -5,6 +5,7 @@
 #include <glm\glm.hpp>
 
 #include "Globals.h"
+#include "imgui_impl_glfw_gl3.h"
 #include "ModelLoader.h"
 #include "World.h"
 
@@ -19,6 +20,9 @@ double mouse_x_diff = 0;
 double mouse_y = -1;
 double mouse_y_diff = 0;
 double scroll = 0;
+
+int cur_frame = 0;
+int total_frames = 1000;
 
 static void error_callback(int error, const char* description)
 {
@@ -93,6 +97,8 @@ void run()
     // GLEW throws some errors, so discard all the errors so far
     while (glGetError() != GL_NO_ERROR) {}
 
+    ImGui_ImplGlfwGL3_Init(window, true);
+
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
@@ -110,6 +116,11 @@ void run()
     while (!glfwWindowShouldClose(window))
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        ImGui_ImplGlfwGL3_NewFrame();
+        ImGui::Begin("Playback");
+        ImGui::SliderInt("Frame", &cur_frame, 0, total_frames);
+        ImGui::End();
         
         double newTime = glfwGetTime();
         double timeElapsed = newTime - oldTime;
@@ -118,6 +129,7 @@ void run()
         oldTime = newTime;
         scroll = 0;
 
+        ImGui::Render();
         glfwSwapBuffers(window);
         glfwPollEvents();
     }

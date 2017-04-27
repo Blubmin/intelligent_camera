@@ -106,7 +106,7 @@ void RenderingSystem::bindMaterial(Material material)
 
 void RenderingSystem::bindGrid()
 {
-    int grid_max = 100;
+    int grid_max = 300;
     int step = 10;
     this->grid_points = vector<vec3>();
     for (int i = 0; i <= grid_max; i += step) {

@@ -11,3 +11,6 @@ extern double mouse_x_diff;
 extern double mouse_y;
 extern double mouse_y_diff;
 extern double scroll;
+
+extern int cur_frame;
+extern int total_frames;

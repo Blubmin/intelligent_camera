@@ -134,6 +134,7 @@
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="EntityFactory.cpp" />
     <ClCompile Include="GLSL.cpp" />
+    <ClCompile Include="imgui_impl_glfw_gl3.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
@@ -159,6 +160,7 @@
     <ClInclude Include="EntityFactory.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="GLSL.h" />
+    <ClInclude Include="imgui_impl_glfw_gl3.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="ModelLoader.h" />
@@ -172,6 +174,11 @@
     <ClInclude Include="Scale.h" />
     <ClInclude Include="SplineCamera.h" />
     <ClInclude Include="World.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\imgui_lib\imgui_lib.vcxproj">
+      <Project>{d26ffbe9-862e-474f-aba6-cf93d343736e}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
