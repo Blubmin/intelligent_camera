@@ -1,6 +1,9 @@
 #include "QuickHull.h"
 
+#include <algorithm>
 #include <climits>
+#include <list>
+#include <stack>
 #include <vector>
 
 #include <glm\glm.hpp>
@@ -9,6 +12,86 @@
 
 using namespace glm;
 using namespace std;
+
+struct HalfSpaceCheck {
+    vec3 _norm, _v1;
+    HalfSpaceCheck(vec3 norm, vec3 v1) {
+        _norm = norm;
+        _v1 = v1;
+    }
+
+    bool operator() (vec3 v) {
+        return dot(_norm, v - _v1) > 0;
+    }
+};
+
+class Triangle {
+
+    vec3 norm;
+
+    bool is_out(vec3 v) {
+        return dot(norm, v - v1) < 0;
+    }
+
+public:
+    vec3 v1, v2, v3;
+    vector<vec3> verts;
+
+    Triangle() {};
+
+    Triangle(vec3 v1, vec3 v2, vec3 v3, vector<vec3> & verts) {
+        this->v1 = v1;
+        this->v2 = v2;
+        this->v3 = v3;
+        this->norm = normalize(cross(v2 - v1, v3 - v1));
+
+        if (std::find(verts.begin(), verts.end(), v1) != verts.end())
+            verts.erase(remove(verts.begin(), verts.end(), v1));
+        if (std::find(verts.begin(), verts.end(), v2) != verts.end())
+            verts.erase(remove(verts.begin(), verts.end(), v2));
+        if (std::find(verts.begin(), verts.end(), v3) != verts.end())
+            verts.erase(remove(verts.begin(), verts.end(), v3));
+
+        vector<vec3>::iterator iter = remove_if(verts.begin(), verts.end(), HalfSpaceCheck(norm, v1));
+        this->verts = vector<vec3>(iter, verts.end());
+        verts.erase(iter, verts.end());
+    }
+
+    ~Triangle() {};
+
+    bool tri_dot(vec3 v1, vec3 v2, vec3 v3) {
+        vec3 norm = normalize(cross(v2 - v1, v3 - v1));
+        return dot(this->norm, norm) > 0;
+    }
+
+    bool is_edge() {
+        return verts.empty();
+    }
+
+    vec3 max_point() {
+        vec3 p;
+        float max_dist = -1;
+        for (auto v = verts.begin(); v != verts.end(); v++) {
+            float dist = dot(norm, *v - v1);
+            if (max_dist < dist) {
+                max_dist = dist;
+                p = *v;
+            }
+        }
+        return p;
+    }
+
+    static Triangle create_triangle(Triangle source, vec3 v1, vec3 v2, vec3 v3, vector<vec3>& verts, bool same_dir = true) {
+        Triangle t1;
+        if (source.tri_dot(v1, v2, v3) == same_dir) {
+            t1 = Triangle(v1, v2, v3, verts);
+        }
+        else {
+            t1 = Triangle(v1, v3, v2, verts);
+        }
+        return t1;
+    }
+};
 
 QuickHull::QuickHull() {}
 
@@ -77,36 +160,62 @@ Mesh QuickHull::GenerateHull(const Mesh & mesh) {
     vec3 norm = normalize(cross(v2 - v1, v3 - v1));
 
     vec3 v4;
-    max_dist = -1;
+    max_dist = 0;
 
     // Finds fourth point that create largest overall tetrahedron
     for (auto v = verts.begin(); v != verts.end(); v++) {
-        float dist = abs(dot(norm, *v - v1));
-        if (max_dist < dist) {
+        float dist = dot(norm, *v - v1);
+        if (abs(max_dist) < abs(dist)) {
             max_dist = dist;
             v4 = *v;
         }
     }
 
-    vector<vec3> final_verts;
-    final_verts.push_back(v1);
-    final_verts.push_back(v2);
-    final_verts.push_back(v3);
-    final_verts.push_back(v4);
+    Triangle t1, t2, t3, t4;
 
+    if (max_dist < 0) {
+        t1 = Triangle(v1, v2, v3, verts);
+    }
+    else {
+        t1 = Triangle(v1, v3, v2, verts);
+    }
+
+    t2 = Triangle::create_triangle(t1, v1, v2, v4, verts, false);
+    t3 = Triangle::create_triangle(t1, v1, v3, v4, verts, false);
+    t4 = Triangle::create_triangle(t1, v2, v3, v4, verts, false);
+
+    vector<vec3> final_verts;
     vector<GLuint> indices;
-    indices.push_back(0);
-    indices.push_back(1);
-    indices.push_back(2);
-    indices.push_back(0);
-    indices.push_back(1);
-    indices.push_back(3);
-    indices.push_back(0);
-    indices.push_back(3);
-    indices.push_back(2);
-    indices.push_back(1);
-    indices.push_back(3);
-    indices.push_back(2);
+    stack<Triangle> tris;
+    tris.push(t1);
+    tris.push(t2);
+    tris.push(t3);
+    tris.push(t4);
+
+    while (!tris.empty()) {
+        Triangle t = tris.top();
+        tris.pop();
+
+        if (t.is_edge()) {
+            final_verts.push_back(t.v1);
+            final_verts.push_back(t.v2);
+            final_verts.push_back(t.v3);
+
+            indices.push_back(indices.size());
+            indices.push_back(indices.size());
+            indices.push_back(indices.size());
+        }
+        else {
+            vec3 v = t.max_point();
+            t1 = Triangle::create_triangle(t, t.v1, t.v2, v, t.verts);
+            t2 = Triangle::create_triangle(t, t.v1, v, t.v3, t.verts);
+            t3 = Triangle::create_triangle(t, v, t.v2, t.v3, t.verts);
+
+            tris.push(t1);
+            tris.push(t2);
+            tris.push(t3);
+        }
+    }
 
     Mesh temp;
     temp.verts = final_verts;
@@ -115,14 +224,3 @@ Mesh QuickHull::GenerateHull(const Mesh & mesh) {
 
     return temp;
 }
-
-
-class Triangle {
-public:
-    Triangle(vec3 v1, vec3 v2, vec3 v3, const vector<vec3> & verts) {
-
-        for (auto v = verts.begin(); v != verts.end(); v++) {
-
-        }
-    }
-};

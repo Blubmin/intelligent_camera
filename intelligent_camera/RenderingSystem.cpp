@@ -67,8 +67,8 @@ void RenderingSystem::drawEntities(shared_ptr<World> world) {
 
             drawMesh(mesh, view_hull ? GL_LINE : GL_FILL);
 
-            glUniform3f(this->phong.getUniformHandle("uDiffuseColor"), 1, 0, 0);
-            glDisable(GL_CULL_FACE);
+            //glUniform3f(this->phong.getUniformHandle("uDiffuseColor"), 1, 0, 0);
+            //glDisable(GL_CULL_FACE);
             drawMesh(model->hulls.at(j), view_hull ? GL_FILL : GL_LINE);
         }
     }
