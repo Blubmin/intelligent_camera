@@ -1,6 +1,5 @@
 #include <iostream>
 
-// #include "imgui_impl_glfw_gl3.h"
 #include <GL\glew.h>
 #include <GLFW\glfw3.h>
 #include <glm\glm.hpp>
@@ -27,6 +26,8 @@ double scroll = 0;
 int cur_frame = 0;
 int total_frames = 1000;
 
+bool input_active = true;
+
 static void error_callback(int error, const char* description)
 {
     fprintf(stderr, "Error: %s\n", description);
@@ -34,28 +35,42 @@ static void error_callback(int error, const char* description)
 
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod)
 {
+    if (key == GLFW_KEY_H && mod & GLFW_MOD_CONTROL && action == GLFW_PRESS) {
+        input_active = !input_active;
+        glfwSetInputMode(window, GLFW_CURSOR, input_active ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
+        glfwGetCursorPos(window, &mouse_x, &mouse_y);
+    }
+
     if (key < 1024)
-        keys[key] = action;
+        keys[key] = input_active ? action : -1;
     
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GLFW_TRUE);
 
     mods = mod;
+
+    ImGui_ImplGlfwGL3_KeyCallback(window, key, scancode, action, mod);
 }
 
 static void mouse_button_callback(GLFWwindow* window, int button, int action, int mod)
 {
     mouse_buttons[button] = action;
     mods = mod;
+
+    ImGui_ImplGlfwGL3_MouseButtonCallback(window, button, action, mod);
 }
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
     scroll = yoffset;
+
+    ImGui_ImplGlfwGL3_ScrollCallback(window, xoffset, yoffset);
 }
 
 static void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 {
+    if (!input_active) return;
+
     if (mouse_x != -1 || mouse_y != -1)
     {
         mouse_x_diff = xpos - mouse_x;
@@ -88,6 +103,8 @@ void run()
     glfwSetCursorPosCallback(window, cursor_position_callback);
     glfwSetMouseButtonCallback(window, mouse_button_callback);
     glfwSetScrollCallback(window, scroll_callback);
+    glfwSetCharCallback(window, ImGui_ImplGlfwGL3_CharCallback);
+
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     glfwMakeContextCurrent(window);
@@ -101,6 +118,8 @@ void run()
     while (glGetError() != GL_NO_ERROR) {}
 
     ImGui_ImplGlfwGL3_Init(window, false);
+    cout << ImGui::GetIO().MouseDrawCursor << endl;
+    //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
