@@ -6,6 +6,7 @@
 #include <glm\gtc\type_ptr.hpp>
 
 #include "GLSL.h"
+#include "Globals.h"
 #include "Player.h"
 #include "Position.h"
 #include "Rotation.h"
@@ -16,32 +17,28 @@ using namespace glm;
 using namespace GLSL;
 using namespace std;
 
-RenderingSystem::RenderingSystem()
-{
-    this->mask = COMPONENT_MODEL | 
-                 COMPONENT_POSITION | 
-                 COMPONENT_ROTATION | 
-                 COMPONENT_SCALE;
+RenderingSystem::RenderingSystem() {
+    this->mask = COMPONENT_MODEL |
+        COMPONENT_POSITION |
+        COMPONENT_ROTATION |
+        COMPONENT_SCALE;
 
     this->phong = Program("phong.vert", "phong.frag");
     this->grid = Program("grid.vert", "grid.frag");
+    this->hull = Program("flat.vert", "flat.frag");
     this->bindGrid();
     this->projection = perspective((float)radians(45.0), 1280.0f / 720, 0.1f, 800.f);
 }
 
-RenderingSystem::~RenderingSystem()
-{
-}
+RenderingSystem::~RenderingSystem() {}
 
-void RenderingSystem::render(shared_ptr<World> world)
-{
+void RenderingSystem::render(shared_ptr<World> world) {
     drawGrid(world);
     drawEntities(world);
 }
 
-void RenderingSystem::drawEntities(shared_ptr<World> world)
-{
-    glUseProgram(this->phong.prog);
+void RenderingSystem::drawEntities(shared_ptr<World> world) {
+    glUseProgram(this->hull.prog);
 
     mat4 viewMat = world->camera.getViewMatrix();
     vec3 camPos = world->camera.pos;
@@ -50,8 +47,7 @@ void RenderingSystem::drawEntities(shared_ptr<World> world)
     glUniform3f(this->phong.getUniformHandle("uDirLight"), 1, -1, -1);
     glUniform3fv(this->phong.getUniformHandle("uCameraPos"), 1, value_ptr(camPos));
 
-    for (int i = 0; i < world->entities.size(); i++)
-    {
+    for (int i = 0; i < world->entities.size(); i++) {
         shared_ptr<Entity> entity = world->entities[i];
         if (!entity->check_mask(this->mask))
             continue;
@@ -59,8 +55,7 @@ void RenderingSystem::drawEntities(shared_ptr<World> world)
         glUniformMatrix4fv(this->phong.getUniformHandle("uModelMatrix"), 1, GL_FALSE, value_ptr(getModelMatrix(entity)));
 
         shared_ptr<Model> model = dynamic_pointer_cast<Model>(entity->getComponent(COMPONENT_MODEL));
-        for (int j = 0; j < model->meshes.size(); j++)
-        {
+        for (int j = 0; j < model->meshes.size(); j++) {
             Mesh mesh = model->meshes.at(j);
             if (entity->check_mask(COMPONENT_PLAYER)) {
                 shared_ptr<Player> player = dynamic_pointer_cast<Player>(entity->getComponent(COMPONENT_PLAYER));
@@ -70,16 +65,17 @@ void RenderingSystem::drawEntities(shared_ptr<World> world)
                 bindMaterial(model->materials[mesh.materialIdx]);
             }
 
-            glBindVertexArray(mesh.VAO);
-            glDrawElements(GL_TRIANGLES, mesh.indices.size(), GL_UNSIGNED_INT, 0);
-            glBindVertexArray(0);
+            drawMesh(mesh, view_hull ? GL_LINE : GL_FILL);
+
+            glUniform3f(this->phong.getUniformHandle("uDiffuseColor"), 1, 0, 0);
+            glDisable(GL_CULL_FACE);
+            drawMesh(model->hulls.at(j), view_hull ? GL_FILL : GL_LINE);
         }
     }
     glUseProgram(0);
 }
 
-mat4 RenderingSystem::getModelMatrix(shared_ptr<Entity> entity)
-{
+mat4 RenderingSystem::getModelMatrix(shared_ptr<Entity> entity) {
     mat4 modelMatrix = mat4();
 
     shared_ptr<Position> pos = dynamic_pointer_cast<Position>(entity->getComponent(COMPONENT_POSITION));
@@ -92,21 +88,19 @@ mat4 RenderingSystem::getModelMatrix(shared_ptr<Entity> entity)
 
     modelMatrix = glm::rotate(modelMatrix, rot->phi, vec3(1, 0, 0));
     modelMatrix = glm::rotate(modelMatrix, rot->theta, vec3(0, 1, 0));
-    modelMatrix = glm::rotate(modelMatrix, rot->psi, vec3(0, 0, 1));  
+    modelMatrix = glm::rotate(modelMatrix, rot->psi, vec3(0, 0, 1));
 
     return modelMatrix;
 }
 
-void RenderingSystem::bindMaterial(Material material)
-{
+void RenderingSystem::bindMaterial(Material material) {
     //glUniform3fv(this->phong.getUniformHandle("uAmbientColor"), 1, value_ptr(material.ambient));
     glUniform3fv(this->phong.getUniformHandle("uDiffuseColor"), 1, value_ptr(material.diffuse));
     //glUniform3fv(this->phong.getUniformHandle("uSpecularColor"), 1, value_ptr(material.specular));
     //glUniform1fv(this->phong.getUniformHandle("uShininess"), 1, &material.shininess);
 }
 
-void RenderingSystem::bindGrid()
-{
+void RenderingSystem::bindGrid() {
     int grid_max = 300;
     int step = 10;
     this->grid_points = vector<vec3>();
@@ -132,8 +126,7 @@ void RenderingSystem::bindGrid()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void RenderingSystem::drawGrid(shared_ptr<World> world)
-{
+void RenderingSystem::drawGrid(shared_ptr<World> world) {
     glUseProgram(this->grid.prog);
 
     mat4 viewMat = world->camera.getViewMatrix();
@@ -146,4 +139,14 @@ void RenderingSystem::drawGrid(shared_ptr<World> world)
     glBindVertexArray(0);
 
     glUseProgram(0);
+}
+
+void RenderingSystem::drawMesh(const Mesh & mesh, GLint mode) {
+    GLint prev_mode[2];
+    glGetIntegerv(GL_POLYGON_MODE, prev_mode);
+    glPolygonMode(GL_FRONT_AND_BACK, mode);
+    glBindVertexArray(mesh.VAO);
+    glDrawElements(GL_TRIANGLES, mesh.indices.size(), GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
+    glPolygonMode(GL_FRONT_AND_BACK, prev_mode[1]);
 }

@@ -119,6 +119,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="flat.frag" />
+    <None Include="flat.vert" />
     <None Include="grid.frag" />
     <None Include="grid.vert" />
     <None Include="packages.config" />

@@ -1,7 +1,7 @@
 #version 330
 
 layout(location = 0) in vec3 aPosition;
-layout(location = 0) in vec3 aNormal;
+layout(location = 1) in vec3 aNormal;
 
 uniform mat4 uProjMatrix;
 uniform mat4 uViewMatrix;

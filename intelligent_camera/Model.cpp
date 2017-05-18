@@ -13,19 +13,23 @@ Model::Model() : Component(COMPONENT_MODEL)
 Model::Model(const aiScene* scene) : Component(COMPONENT_MODEL)
 {
     meshes = vector<Mesh>();
+    hulls = vector<Mesh>();
     for (int i = 0; i < scene->mNumMeshes; i++)
     {
         Mesh mesh = Mesh(scene->mMeshes[i]);
         meshes.push_back(mesh);
         Mesh hull = QuickHull::GenerateHull(mesh);
-        cout << hull.indices.size() << endl;
+        hulls.push_back(hull);
     }
 
     shiftUpToGround();
     shrink();
 
-    for (int i = 0; i < this->meshes.size(); i++)
+    for (int i = 0; i < this->meshes.size(); i++) {
         this->meshes[i].bindBuffers();
+        this->hulls[i].bindBuffers();
+    }
+        
 
     materials = vector<Material>();
     for (int i = 0; i < scene->mNumMaterials; i++)
@@ -51,6 +55,12 @@ void Model::shiftUpToGround()
         for (int j = 0; j < this->meshes[i].verts.size(); j++)
         {
             this->meshes[i].verts[j].y -= miny;
+        }
+    }
+
+    for (int i = 0; i < this->hulls.size(); i++) {
+        for (int j = 0; j < this->hulls[i].verts.size(); j++) {
+            this->hulls[i].verts[j].y -= miny;
         }
     }
 }
@@ -86,6 +96,12 @@ void Model::shrink()
         for (int j = 0; j < this->meshes[i].verts.size(); j++)
         {
             this->meshes[i].verts[j] /= max_diff;
+        }
+    }
+
+    for (int i = 0; i < this->hulls.size(); i++) {
+        for (int j = 0; j < this->hulls[i].verts.size(); j++) {
+            this->hulls[i].verts[j] /= max_diff;
         }
     }
 }

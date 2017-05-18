@@ -9,6 +9,7 @@
 #include "Material.h"
 #include "Program.h"
 
+class Mesh;
 class World;
 
 class RenderingSystem
@@ -25,11 +26,13 @@ private:
 
     void bindGrid();
     void drawGrid(std::shared_ptr<World> world);
+    void drawMesh(const Mesh & mesh, GLint mode);
     void drawEntities(std::shared_ptr<World> world);
 
     unsigned long mask;
     Program phong;
     Program grid;
+    Program hull;
     std::vector<glm::vec3> grid_points;
     std::vector<GLuint> grid_idx;
     GLuint GRID_VBO;

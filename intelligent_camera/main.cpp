@@ -29,6 +29,7 @@ int cur_frame = 0;
 int total_frames = 1000;
 
 bool input_active = true;
+bool view_hull = false;
 
 static void error_callback(int error, const char* description)
 {
@@ -41,6 +42,10 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
         input_active = !input_active;
         glfwSetInputMode(window, GLFW_CURSOR, input_active ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
         glfwGetCursorPos(window, &mouse_x, &mouse_y);
+    }
+
+    if (key == GLFW_KEY_C && mod & GLFW_MOD_CONTROL && action == GLFW_PRESS) {
+        view_hull = !view_hull;
     }
 
     if (key < 1024)

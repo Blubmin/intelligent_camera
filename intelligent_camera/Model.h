@@ -17,6 +17,7 @@ public:
     ~Model();
 
     std::vector<Mesh> meshes;
+    std::vector<Mesh> hulls;
     std::vector<Material> materials;
 
 private:

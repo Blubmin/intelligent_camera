@@ -28,6 +28,6 @@ void main()
 
 	vec3 ambient = uDiffuseColor * .4;
 	vec3 diffuse = uDiffuseColor * max(0.0, dot(vNormal, light)) * .6;
-	vec3 specular = vec3(1) * pow(max(0.0, dot(vNormal, normalize(light + view))), 50) * 0; 
+	vec3 specular = uDiffuseColor * pow(max(0.0, dot(vNormal, normalize(light + view))), .5) * 0; 
 	finalColor = ambient + diffuse + specular;
 }

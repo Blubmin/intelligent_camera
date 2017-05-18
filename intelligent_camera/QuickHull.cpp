@@ -22,12 +22,12 @@ Mesh QuickHull::GenerateHull(const Mesh & mesh) {
     copy(mesh.verts.begin(), mesh.verts.end(), verts.begin());
 
     vector<vec3> min_max = vector<vec3>(6);
-    min_max[1] = vec3(FLT_MAX, 0, 0);
-    min_max[2] = vec3(0, FLT_MAX, 0);
-    min_max[3] = vec3(0, 0, FLT_MAX);
-    min_max[4] = vec3(FLT_MIN, 0, 0);
-    min_max[5] = vec3(0, FLT_MIN, 0);
-    min_max[6] = vec3(0, 0, FLT_MIN);
+    min_max[0] = vec3(FLT_MAX, 0, 0);
+    min_max[1] = vec3(0, FLT_MAX, 0);
+    min_max[2] = vec3(0, 0, FLT_MAX);
+    min_max[3] = vec3(FLT_MIN, 0, 0);
+    min_max[4] = vec3(0, FLT_MIN, 0);
+    min_max[5] = vec3(0, 0, FLT_MIN);
 
     // Finds x, y, z extremes
     for (auto v = verts.begin(); v != verts.end(); v++) {
@@ -49,7 +49,7 @@ Mesh QuickHull::GenerateHull(const Mesh & mesh) {
 
     // Finds furthest apart extremes
     for (int i = 0; i < min_max.size(); i++) {
-        for (int j = i + 1; j < 6; j++) {
+        for (int j = i + 1; j < min_max.size(); j++) {
             float dist = distance(min_max[i], min_max[j]);
             if (max_dist < dist) {
                 max_dist = dist;
@@ -88,14 +88,38 @@ Mesh QuickHull::GenerateHull(const Mesh & mesh) {
         }
     }
 
+    vector<vec3> final_verts;
+    final_verts.push_back(v1);
+    final_verts.push_back(v2);
+    final_verts.push_back(v3);
+    final_verts.push_back(v4);
+
+    vector<GLuint> indices;
+    indices.push_back(0);
+    indices.push_back(1);
+    indices.push_back(2);
+    indices.push_back(0);
+    indices.push_back(1);
+    indices.push_back(3);
+    indices.push_back(0);
+    indices.push_back(3);
+    indices.push_back(2);
+    indices.push_back(1);
+    indices.push_back(3);
+    indices.push_back(2);
 
     Mesh temp;
-    temp.verts;
+    temp.verts = final_verts;
+    temp.indices = indices;
+    temp.norms = vector<vec3>(1);
 
-    return Mesh();
+    return temp;
 }
 
 
 class Triangle {
+public:
+    Triangle(vec3 v1, vec3 v2, vec3 v3, const vector<vec3> & verts) {
 
+    }
 };

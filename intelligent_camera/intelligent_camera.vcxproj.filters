@@ -28,6 +28,12 @@
     <None Include="grid.frag">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="flat.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="flat.vert">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
