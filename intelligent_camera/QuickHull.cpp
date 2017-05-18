@@ -50,7 +50,7 @@ Mesh QuickHull::GenerateHull(const Mesh & mesh) {
     // Finds furthest apart extremes
     for (int i = 0; i < min_max.size(); i++) {
         for (int j = i + 1; j < min_max.size(); j++) {
-            float dist = distance(min_max[i], min_max[j]);
+            float dist = abs(distance(min_max[i], min_max[j]));
             if (max_dist < dist) {
                 max_dist = dist;
                 p1 = i;
@@ -67,7 +67,7 @@ Mesh QuickHull::GenerateHull(const Mesh & mesh) {
     // Finds extreme that creates the largest triangle with the previous two
     for (int i = 0; i < min_max.size(); i++) {
         vec3 v = min_max[i];
-        float dist = length(cross(v - v1, v - v2)) / length(v2 - v1);
+        float dist = abs(length(cross(v - v1, v - v2)) / length(v2 - v1));
         if (max_dist < dist) {
             max_dist = dist;
             v3 = v;
@@ -81,7 +81,7 @@ Mesh QuickHull::GenerateHull(const Mesh & mesh) {
 
     // Finds fourth point that create largest overall tetrahedron
     for (auto v = verts.begin(); v != verts.end(); v++) {
-        float dist = dot(norm, *v - v1);
+        float dist = abs(dot(norm, *v - v1));
         if (max_dist < dist) {
             max_dist = dist;
             v4 = *v;
@@ -121,5 +121,8 @@ class Triangle {
 public:
     Triangle(vec3 v1, vec3 v2, vec3 v3, const vector<vec3> & verts) {
 
+        for (auto v = verts.begin(); v != verts.end(); v++) {
+
+        }
     }
 };

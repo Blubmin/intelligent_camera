@@ -15,5 +15,6 @@ public:
     glm::vec3 lookAtPt;
     glm::vec3 pos;
     float zoomSpeed;
+    float moveSpeed;
 };
 

@@ -11,9 +11,10 @@ using namespace glm;
 
 BlenderCamera::BlenderCamera()
 {
-    this->pos = vec3(20, 20, 20);
+    this->pos = vec3(10, 5, 10);
     this->lookAtPt = vec3(0, 0, 0);
-    this->zoomSpeed = 10;
+    this->zoomSpeed = 30;
+    this->moveSpeed = 5;
 }
 
 
@@ -35,9 +36,9 @@ void BlenderCamera::update(double timeElapsed)
 
     if (mods & GLFW_MOD_SHIFT) {
         vec3 shift_vec = normalize(cross(this->pos - this->lookAtPt, vec3(0, 1, 0)));
-        vec3 shift = shift_vec * (float)(mouse_x_diff * timeElapsed);
+        vec3 shift = shift_vec * (float)(mouse_x_diff * timeElapsed) * moveSpeed;
         vec3 up_shift_vec = normalize(cross(this->pos - this->lookAtPt, shift_vec));
-        vec3 up_shift = up_shift_vec * (float)(-mouse_y_diff * timeElapsed);
+        vec3 up_shift = up_shift_vec * (float)(-mouse_y_diff * timeElapsed) * moveSpeed;
         this->pos += shift;
         this->lookAtPt += shift;
         this->pos += up_shift;

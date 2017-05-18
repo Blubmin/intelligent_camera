@@ -4,7 +4,8 @@
 #include <vector>
 
 #include "SplineCamera.h"
-#include "DebugCamera.h"
+#include "BlenderCamera.h"
+//#include "DebugCamera.h"
 #include "Entity.h"
 #include "EntityFactory.h"
 #include "RenderingSystem.h"
@@ -22,7 +23,8 @@ public:
     std::vector<std::shared_ptr<Entity>> entities;
     EntityFactory factory;
     // SplineCamera camera;
-    DebugCamera camera;
+    // DebugCamera camera;
+    BlenderCamera camera;
     RenderingSystem renderer;
     PlayerMovementSystem movement;
 };
