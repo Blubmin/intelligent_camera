@@ -9,11 +9,11 @@ uniform mat4 uModelMatrix;
 uniform vec3 uLightPos;
 
 out vec3 vNormal;
-out vec3 vLight;
+out vec3 vPos;
 
 void main()
 {
 	gl_Position = uProjMatrix * uViewMatrix * uModelMatrix * vec4(aPosition, 1.0);
 	vNormal = normalize(aNormal);
-	vLight = uLightPos - vec3(uModelMatrix * vec4(aPosition, 1.0));
+	vPos = (uModelMatrix * vec4(aPosition, 1.0)).xyz;
 }

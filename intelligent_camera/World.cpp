@@ -16,8 +16,9 @@ World::~World() {}
 
 void World::init() {
     // this->camera = SplineCamera(this->shared_from_this());
-    this->camera = DebugCamera(vec3(-50, 50, -50));
-    factory.createBoid(this->shared_from_this(), 0, 0, 0);
+    this->camera = DebugCamera(vec3(-10, 5, -10));
+    //factory.createBoid(this->shared_from_this(), 0, 0, 0);
+    factory.createTree(this->shared_from_this(), 0, 0, 0);
     //factory.createPlayer(this->shared_from_this(), 0, 0, 0, 0);
     //factory.createPlayer(this->shared_from_this(), 0, 0, 0, 1);
     //factory.createPlayer(this->shared_from_this(), 0, 0, 0, 2);

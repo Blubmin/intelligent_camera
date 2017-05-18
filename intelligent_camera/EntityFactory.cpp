@@ -51,7 +51,7 @@ void EntityFactory::createTree(std::shared_ptr<World> world, float x, float y, f
     }
     catch (const exception& e)
     {
-        model = ldr.loadModelByName("Models/tree.fbx", "tree");
+        model = ldr.loadModelByName("Models/tree2.obj", "tree");
     }
     tree->addComponent(model);
     tree->addComponent(make_shared<Position>(Position(x, y, z)));

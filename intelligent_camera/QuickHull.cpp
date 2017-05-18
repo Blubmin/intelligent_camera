@@ -88,6 +88,10 @@ Mesh QuickHull::GenerateHull(const Mesh & mesh) {
         }
     }
 
+
+    Mesh temp;
+    temp.verts;
+
     return Mesh();
 }
 

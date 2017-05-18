@@ -44,8 +44,11 @@ void RenderingSystem::drawEntities(shared_ptr<World> world)
     glUseProgram(this->phong.prog);
 
     mat4 viewMat = world->camera.getViewMatrix();
+    vec3 camPos = world->camera.pos;
     glUniformMatrix4fv(this->phong.getUniformHandle("uViewMatrix"), 1, GL_FALSE, value_ptr(viewMat));
     glUniformMatrix4fv(this->phong.getUniformHandle("uProjMatrix"), 1, GL_FALSE, value_ptr(this->projection));
+    glUniform3f(this->phong.getUniformHandle("uDirLight"), 1, -1, -1);
+    glUniform3fv(this->phong.getUniformHandle("uCameraPos"), 1, value_ptr(camPos));
 
     for (int i = 0; i < world->entities.size(); i++)
     {
@@ -54,7 +57,6 @@ void RenderingSystem::drawEntities(shared_ptr<World> world)
             continue;
 
         glUniformMatrix4fv(this->phong.getUniformHandle("uModelMatrix"), 1, GL_FALSE, value_ptr(getModelMatrix(entity)));
-        glUniform3f(this->phong.getUniformHandle("uLightPos"), 50, 5000, 50);
 
         shared_ptr<Model> model = dynamic_pointer_cast<Model>(entity->getComponent(COMPONENT_MODEL));
         for (int j = 0; j < model->meshes.size(); j++)
@@ -69,7 +71,7 @@ void RenderingSystem::drawEntities(shared_ptr<World> world)
             }
 
             glBindVertexArray(mesh.VAO);
-            glDrawArrays(GL_TRIANGLES, 0, mesh.indices.size());
+            glDrawElements(GL_TRIANGLES, mesh.indices.size(), GL_UNSIGNED_INT, 0);
             glBindVertexArray(0);
         }
     }

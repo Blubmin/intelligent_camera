@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include "QuickHull.h"
+
 using namespace std;
 
 Model::Model() : Component(COMPONENT_MODEL)
@@ -15,6 +17,8 @@ Model::Model(const aiScene* scene) : Component(COMPONENT_MODEL)
     {
         Mesh mesh = Mesh(scene->mMeshes[i]);
         meshes.push_back(mesh);
+        Mesh hull = QuickHull::GenerateHull(mesh);
+        cout << hull.indices.size() << endl;
     }
 
     shiftUpToGround();

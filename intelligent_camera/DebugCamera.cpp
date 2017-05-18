@@ -11,10 +11,10 @@ DebugCamera::DebugCamera() {}
 
 DebugCamera::DebugCamera(vec3 starting_pos)
 {
-    theta = 0.0f;
-    phi = 0.0f;
     pos = starting_pos;
     frontVec = -normalize(starting_pos);
+    theta = degrees(atan(frontVec.x / frontVec.z));
+    phi = degrees(atan(frontVec.y / length(vec2(frontVec.x, frontVec.z))));
     upVec = vec3(0.0f, 1.0f, 0.0f);
     speed = 40;
     rotationSpeed = 0.1;
