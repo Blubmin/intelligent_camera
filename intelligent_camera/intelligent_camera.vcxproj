@@ -133,6 +133,7 @@
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="EntityFactory.cpp" />
+    <ClCompile Include="ExceptionWrapper.cpp" />
     <ClCompile Include="GLSL.cpp" />
     <ClCompile Include="imgui_impl_glfw_gl3.cpp" />
     <ClCompile Include="main.cpp" />
@@ -144,6 +145,7 @@
     <ClCompile Include="PlayerMovementSystem.cpp" />
     <ClCompile Include="Position.cpp" />
     <ClCompile Include="Program.cpp" />
+    <ClCompile Include="QuickHull.cpp" />
     <ClCompile Include="RenderingSystem.cpp" />
     <ClCompile Include="Rotation.cpp" />
     <ClCompile Include="Scale.cpp" />
@@ -158,6 +160,7 @@
     <ClInclude Include="Component.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityFactory.h" />
+    <ClInclude Include="ExceptionWrapper.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="GLSL.h" />
     <ClInclude Include="imgui_impl_glfw_gl3.h" />
@@ -169,6 +172,7 @@
     <ClInclude Include="PlayerMovementSystem.h" />
     <ClInclude Include="Position.h" />
     <ClInclude Include="Program.h" />
+    <ClInclude Include="QuickHull.h" />
     <ClInclude Include="RenderingSystem.h" />
     <ClInclude Include="Rotation.h" />
     <ClInclude Include="Scale.h" />

@@ -1,5 +1,6 @@
 #include "Program.h"
 
+#include "ExceptionWrapper.h"
 #include "GLSL.h"
 
 using namespace GLSL;
@@ -16,11 +17,11 @@ Program::Program(const std::string & vertexShader, const std::string & fragShade
 
     // Compiling the vertex shader
     this->vert = compileShader(vertexShader, GL_VERTEX_SHADER, &rc);
-    if (!rc) { throw runtime_error("Error compiling vertex shader: " + vertexShader); }
+    if (!rc) throw_exception(runtime_error("Error compiling vertex shader: " + vertexShader));
 
     // Compiling the fragment shader
     this->frag = compileShader(fragShader, GL_FRAGMENT_SHADER, &rc);
-    if (!rc) { throw runtime_error("Error compiling fragment shader: " + fragShader); }
+    if (!rc) throw_exception(runtime_error("Error compiling fragment shader: " + fragShader));
 
     // Creating the program and linking shaders
     this->prog = glCreateProgram();
@@ -32,7 +33,7 @@ Program::Program(const std::string & vertexShader, const std::string & fragShade
     printError();
     glGetProgramiv(this->prog, GL_LINK_STATUS, &rc);
     printProgramInfoLog(this->prog);
-    if (!rc) { throw runtime_error("Error linking shaders " + vertexShader + " and " + fragShader); }
+    if (!rc) throw_exception(runtime_error("Error linking shaders " + vertexShader + " and " + fragShader));
 
     // Sets up uniform/attribute handles
     setupHandles();
@@ -96,7 +97,7 @@ GLint Program::getAttributeHandle(string name)
     }
     catch (exception& e)
     {
-        throw runtime_error("The attribute name '" + name + "' is not bound to this program.");
+        throw_exception(runtime_error("The attribute name '" + name + "' is not bound to this program."));
     }
     return handle;
 }
@@ -110,7 +111,7 @@ GLint Program::getUniformHandle(string name)
     }
     catch (exception& e)
     {
-        throw runtime_error("The uniform name '" + name + "' is not bound to this program.");
+        throw_exception(runtime_error("The uniform name '" + name + "' is not bound to this program."));
     }
     return handle;
 }

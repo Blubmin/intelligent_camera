@@ -50,7 +50,7 @@ void RenderingSystem::drawEntities(shared_ptr<World> world)
     for (int i = 0; i < world->entities.size(); i++)
     {
         shared_ptr<Entity> entity = world->entities[i];
-        if (entity->mask & this->mask != this->mask)
+        if (!entity->check_mask(this->mask))
             continue;
 
         glUniformMatrix4fv(this->phong.getUniformHandle("uModelMatrix"), 1, GL_FALSE, value_ptr(getModelMatrix(entity)));
@@ -60,8 +60,7 @@ void RenderingSystem::drawEntities(shared_ptr<World> world)
         for (int j = 0; j < model->meshes.size(); j++)
         {
             Mesh mesh = model->meshes.at(j);
-
-            if (entity->mask & COMPONENT_PLAYER == COMPONENT_PLAYER) {
+            if (entity->check_mask(COMPONENT_PLAYER)) {
                 shared_ptr<Player> player = dynamic_pointer_cast<Player>(entity->getComponent(COMPONENT_PLAYER));
                 glUniform3fv(this->phong.getUniformHandle("uDiffuseColor"), 1, value_ptr(player->get_color()));
             }

@@ -17,12 +17,13 @@ World::~World() {}
 void World::init() {
     // this->camera = SplineCamera(this->shared_from_this());
     this->camera = DebugCamera(vec3(-50, 50, -50));
-    factory.createPlayer(this->shared_from_this(), 0, 0, 0, 0);
-    factory.createPlayer(this->shared_from_this(), 0, 0, 0, 1);
-    factory.createPlayer(this->shared_from_this(), 0, 0, 0, 2);
-    factory.createPlayer(this->shared_from_this(), 0, 0, 0, 3);
-    factory.createPlayer(this->shared_from_this(), 0, 0, 0, 4);
-    factory.createPlayer(this->shared_from_this(), 0, 0, 0, 5);
+    factory.createBoid(this->shared_from_this(), 0, 0, 0);
+    //factory.createPlayer(this->shared_from_this(), 0, 0, 0, 0);
+    //factory.createPlayer(this->shared_from_this(), 0, 0, 0, 1);
+    //factory.createPlayer(this->shared_from_this(), 0, 0, 0, 2);
+    //factory.createPlayer(this->shared_from_this(), 0, 0, 0, 3);
+    //factory.createPlayer(this->shared_from_this(), 0, 0, 0, 4);
+    //factory.createPlayer(this->shared_from_this(), 0, 0, 0, 5);
 }
 
 void World::step(double elapsedTime) {

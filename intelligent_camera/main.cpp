@@ -1,3 +1,4 @@
+#include <conio.h>
 #include <iostream>
 
 #include <GL\glew.h>
@@ -7,6 +8,7 @@
 #include "..\imgui\imgui.h"
 #include "imgui_impl_glfw_gl3.h"
 
+#include "ExceptionWrapper.h"
 #include "Globals.h"
 #include "ModelLoader.h"
 #include "World.h"
@@ -86,7 +88,7 @@ void run()
 
     if (!glfwInit())
     {
-        throw runtime_error("glfwInit failed");
+        throw_exception(runtime_error("glfwInit failed"));
     }
 
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -96,7 +98,7 @@ void run()
     if (!window)
     {
         glfwTerminate();
-        throw runtime_error("glfwCreateWindow failed");
+        throw_exception(runtime_error("glfwCreateWindow failed"));
     }
 
     glfwSetKeyCallback(window, key_callback);
@@ -112,7 +114,7 @@ void run()
     // initialize GLEW
     glewExperimental = GL_TRUE;
     if (glewInit() != GLEW_OK)
-        throw runtime_error("glewInit failed");
+        throw_exception(runtime_error("glewInit failed"));
 
     // GLEW throws some errors, so discard all the errors so far
     while (glGetError() != GL_NO_ERROR) {}
@@ -169,7 +171,8 @@ int main(int argc, char** argv)
     {
         char temp;
         cerr << e.what() << endl;
-        cin >> temp;
+        cerr << "Press anything to quit..." << endl;
+        _getch();
         exit(EXIT_FAILURE);
     }
 

@@ -42,7 +42,7 @@ void PlayerMovementSystem::move(shared_ptr<World> world) {
     int player = 0;
     for (int i = 0; i < world->entities.size(); i++) {
         shared_ptr<Entity> entity = world->entities[i];
-        if (entity->mask & this->mask != this->mask)
+        if (!entity->check_mask(this->mask))
             continue;
 
         shared_ptr<Position> pos = dynamic_pointer_cast<Position>(entity->getComponent(COMPONENT_POSITION));

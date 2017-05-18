@@ -16,7 +16,7 @@ QuickHull::~QuickHull() {}
 
 Mesh QuickHull::GenerateHull(const Mesh & mesh) {
 
-    if (mesh.verts.size() < 4) return mesh;
+    if (mesh.verts.size() <= 4) return mesh;
 
     vector<vec3> verts(mesh.verts.size());
     copy(mesh.verts.begin(), mesh.verts.end(), verts.begin());

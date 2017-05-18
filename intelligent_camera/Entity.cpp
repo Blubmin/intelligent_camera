@@ -22,3 +22,7 @@ shared_ptr<Component> Entity::getComponent(unsigned long mask)
 {
     return this->components.at(mask);
 }
+
+bool Entity::check_mask(unsigned long mask) {
+    return (this->mask & mask) == mask;
+}
