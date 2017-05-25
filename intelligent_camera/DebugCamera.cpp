@@ -11,7 +11,7 @@ DebugCamera::DebugCamera() {}
 
 DebugCamera::DebugCamera(vec3 starting_pos)
 {
-    pos = starting_pos;
+    _pos = starting_pos;
     frontVec = -normalize(starting_pos);
     theta = degrees(atan(frontVec.x / frontVec.z));
     phi = degrees(atan(frontVec.y / length(vec2(frontVec.x, frontVec.z))));
@@ -28,27 +28,27 @@ void DebugCamera::update(double timeElapsed)
 {
     if (keys[GLFW_KEY_W] == GLFW_PRESS || keys[GLFW_KEY_W] == GLFW_REPEAT)
     {
-        pos += frontVec * speed * (float) timeElapsed;
+        _pos += frontVec * speed * (float) timeElapsed;
     }
     if (keys[GLFW_KEY_S] == GLFW_PRESS || keys[GLFW_KEY_S] == GLFW_REPEAT)
     {
-        pos -= frontVec * speed * (float)timeElapsed;
+        _pos -= frontVec * speed * (float)timeElapsed;
     }
     if (keys[GLFW_KEY_D] == GLFW_PRESS || keys[GLFW_KEY_D] == GLFW_REPEAT)
     {
-        pos += normalize(cross(frontVec, upVec)) * speed * (float)timeElapsed;
+        _pos += normalize(cross(frontVec, upVec)) * speed * (float)timeElapsed;
     }
     if (keys[GLFW_KEY_A] == GLFW_PRESS || keys[GLFW_KEY_A] == GLFW_REPEAT)
     {
-        pos -= normalize(cross(frontVec, upVec)) * speed * (float)timeElapsed;
+        _pos -= normalize(cross(frontVec, upVec)) * speed * (float)timeElapsed;
     }
     if (keys[GLFW_KEY_Q] == GLFW_PRESS || keys[GLFW_KEY_Q] == GLFW_REPEAT)
     {
-        pos += upVec * speed * (float)timeElapsed;
+        _pos += upVec * speed * (float)timeElapsed;
     }
     if (keys[GLFW_KEY_E] == GLFW_PRESS || keys[GLFW_KEY_E] == GLFW_REPEAT)
     {
-        pos -= upVec * speed * (float)timeElapsed;
+        _pos -= upVec * speed * (float)timeElapsed;
     }
 
     static double prev_mouse_x = 0;
@@ -74,5 +74,5 @@ void DebugCamera::update(double timeElapsed)
 
 mat4 DebugCamera::getViewMatrix()
 {
-    return lookAt(pos, pos + frontVec, upVec);
+    return lookAt(_pos, _pos + frontVec, upVec);
 }

@@ -14,7 +14,6 @@ public:
     void update(double elapsedTime);
     glm::mat4 getViewMatrix();
 
-    glm::vec3 pos;
     glm::vec3 upVec;
     glm::vec3 frontVec;
     float theta;

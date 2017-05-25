@@ -40,8 +40,8 @@ void RenderingSystem::render(shared_ptr<World> world) {
 void RenderingSystem::drawEntities(shared_ptr<World> world) {
     glUseProgram(this->hull.prog);
 
-    mat4 viewMat = world->camera.getViewMatrix();
-    vec3 camPos = world->camera.pos;
+    mat4 viewMat = world->camera->getViewMatrix();
+    vec3 camPos = world->camera->pos();
     glUniformMatrix4fv(this->phong.getUniformHandle("uViewMatrix"), 1, GL_FALSE, value_ptr(viewMat));
     glUniformMatrix4fv(this->phong.getUniformHandle("uProjMatrix"), 1, GL_FALSE, value_ptr(this->projection));
     glUniform3f(this->phong.getUniformHandle("uDirLight"), 1, -1, -1);
@@ -131,7 +131,7 @@ void RenderingSystem::bindGrid() {
 void RenderingSystem::drawGrid(shared_ptr<World> world) {
     glUseProgram(this->grid.prog);
 
-    mat4 viewMat = world->camera.getViewMatrix();
+    mat4 viewMat = world->camera->getViewMatrix();
     glUniformMatrix4fv(this->grid.getUniformHandle("uViewMatrix"), 1, GL_FALSE, value_ptr(viewMat));
     glUniformMatrix4fv(this->grid.getUniformHandle("uProjMatrix"), 1, GL_FALSE, value_ptr(this->projection));
     glUniformMatrix4fv(this->grid.getUniformHandle("uModelMatrix"), 1, GL_FALSE, value_ptr(mat4()));

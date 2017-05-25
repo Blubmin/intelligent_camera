@@ -3,9 +3,7 @@
 #include <memory>
 #include <vector>
 
-#include "SplineCamera.h"
-#include "BlenderCamera.h"
-//#include "DebugCamera.h"
+#include "Camera.h"
 #include "Entity.h"
 #include "EntityFactory.h"
 #include "RenderingSystem.h"
@@ -24,7 +22,8 @@ public:
     EntityFactory factory;
     // SplineCamera camera;
     // DebugCamera camera;
-    BlenderCamera camera;
+    // BlenderCamera camera;
+    Camera* camera;
     RenderingSystem renderer;
     PlayerMovementSystem movement;
 };

@@ -2,6 +2,8 @@
 
 #include <glm\glm.hpp>
 
+#include "DebugCamera.h"
+
 using namespace glm;
 using namespace std;
 
@@ -12,12 +14,14 @@ World::World() {
     this->movement = PlayerMovementSystem("positions.json");
 }
 
-World::~World() {}
+World::~World() {
+    delete camera;
+}
 
 void World::init() {
     // this->camera = SplineCamera(this->shared_from_this());
     // this->camera = DebugCamera(vec3(-10, 5, -10));
-    this->camera = BlenderCamera();
+    this->camera = new DebugCamera(vec3(10, 5, 10));
     //factory.createBoid(this->shared_from_this(), 0, 0, 0);
     factory.createTree(this->shared_from_this(), 0, 0, 0);
     //factory.createPlayer(this->shared_from_this(), 0, 0, 0, 0);
@@ -29,7 +33,7 @@ void World::init() {
 }
 
 void World::step(double elapsedTime) {
-    camera.update(elapsedTime);
+    camera->update(elapsedTime);
     movement.move(this->shared_from_this());
     renderer.render(this->shared_from_this());
 }
