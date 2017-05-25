@@ -40,40 +40,6 @@ public:
 	vec3 end() const {
 		return _end;
 	}
-
-	vec3 cross(Edge& e) {
-#ifdef _DEBUG
-		assert(_start == e._end);
-#endif
-		return glm::cross(_start - _end, e._end - e._start);
-	}
-};
-
-namespace std {
-    template<>
-    struct hash<Edge> {
-        size_t operator() (const Edge& e) const {
-            hash<vec3> hasher;
-            size_t seed = 0;
-            seed ^= hasher(e.start());
-            size_t hash = hasher(e.end());
-            hash += 0x9e3779b9 + (seed << 6) + (seed >> 2);
-            seed ^= hash;
-            return seed;
-        }
-    };
-}
-
-struct HalfSpaceCheck {
-	vec3 _norm, _v1;
-	HalfSpaceCheck(vec3 norm, vec3 v1) {
-		_norm = norm;
-		_v1 = v1;
-	}
-
-	bool operator() (vec3& v) {
-		return dot(_norm,  v - _v1) > 0.f;
-	}
 };
 
 class Triangle {
@@ -103,7 +69,7 @@ public:
         verts.erase(remove(verts.begin(), verts.end(), _e3.start()), verts.end());
 
         for (auto v : verts) {
-            if (dot(_norm, v - _center) > 0) {
+            if (can_see(v)) {
                 _verts.push_back(v);
             }
         }
