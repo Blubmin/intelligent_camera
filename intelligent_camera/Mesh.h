@@ -12,7 +12,6 @@ public:
     Mesh();
     Mesh(const aiMesh* scene);
     ~Mesh();    
-
     void bindBuffers();
 
     std::vector<glm::vec3> verts;

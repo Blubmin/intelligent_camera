@@ -45,21 +45,21 @@ void Mesh::bindBuffers()
     glGenBuffers(1, &VBO_VERT);
     glBindBuffer(GL_ARRAY_BUFFER, VBO_VERT);
     glBufferData(GL_ARRAY_BUFFER, verts.size()*sizeof(vec3),
-        &verts[0], GL_STATIC_DRAW);
+		verts.data(), GL_STATIC_DRAW);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
     glGenBuffers(1, &VBO_NORM);
     glBindBuffer(GL_ARRAY_BUFFER, VBO_NORM);
     glBufferData(GL_ARRAY_BUFFER, norms.size()*sizeof(vec3),
-        &norms[0], GL_STATIC_DRAW);
+        norms.data(), GL_STATIC_DRAW);
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
     glGenBuffers(1, &IND);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IND);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER,
-        indices.size()*sizeof(GLuint), &indices[0], GL_STATIC_DRAW);
+        indices.size()*sizeof(GLuint), indices.data(), GL_STATIC_DRAW);
 
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);

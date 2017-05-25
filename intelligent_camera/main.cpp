@@ -30,6 +30,8 @@ int total_frames = 1000;
 
 bool input_active = true;
 bool view_hull = false;
+bool calc_hull = true;
+int hull_counter = 0;
 
 static void error_callback(int error, const char* description)
 {
@@ -42,6 +44,16 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
         input_active = !input_active;
         glfwSetInputMode(window, GLFW_CURSOR, input_active ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
         glfwGetCursorPos(window, &mouse_x, &mouse_y);
+    }
+
+    if (key == GLFW_KEY_LEFT_BRACKET && action == GLFW_PRESS) {
+        hull_counter--;
+        calc_hull = true;
+    }
+
+    if (key == GLFW_KEY_RIGHT_BRACKET && action == GLFW_PRESS) {
+        hull_counter++;
+        calc_hull = true;
     }
 
     if (key == GLFW_KEY_C && mod & GLFW_MOD_CONTROL && action == GLFW_PRESS) {
@@ -133,6 +145,9 @@ void run()
     glCullFace(GL_BACK);
 
     glDisable(GL_BLEND);
+    //glEnable(GL_BLEND); 
+    //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     glClearColor(100 / 255.f, 149 / 255.f, 237 / 255.f, 1.0f);
     
     glfwSwapInterval(.5);

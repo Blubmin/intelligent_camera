@@ -11,7 +11,7 @@ using namespace glm;
 
 BlenderCamera::BlenderCamera()
 {
-    this->pos = vec3(10, 5, 10);
+    this->pos = vec3(10, 5, 0);
     this->lookAtPt = vec3(0, 0, 0);
     this->zoomSpeed = 30;
     this->moveSpeed = 5;
