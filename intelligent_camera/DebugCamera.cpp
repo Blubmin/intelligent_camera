@@ -3,7 +3,7 @@
 #include <GLFW\glfw3.h>
 #include <glm\gtc\matrix_transform.hpp>
 
-#include "Globals.h"
+#include <engine_base\Input.h>
 
 using namespace glm;
 
@@ -26,39 +26,31 @@ DebugCamera::~DebugCamera()
 
 void DebugCamera::update(double timeElapsed)
 {
-    if (keys[GLFW_KEY_W] == GLFW_PRESS || keys[GLFW_KEY_W] == GLFW_REPEAT)
-    {
+    if (Input::key_pressed_down(GLFW_KEY_W)) {
         pos += frontVec * speed * (float) timeElapsed;
     }
-    if (keys[GLFW_KEY_S] == GLFW_PRESS || keys[GLFW_KEY_S] == GLFW_REPEAT)
-    {
+    if (Input::key_pressed_down(GLFW_KEY_S)) {
         pos -= frontVec * speed * (float)timeElapsed;
     }
-    if (keys[GLFW_KEY_D] == GLFW_PRESS || keys[GLFW_KEY_D] == GLFW_REPEAT)
-    {
+    if (Input::key_pressed_down(GLFW_KEY_D)) {
         pos += normalize(cross(frontVec, upVec)) * speed * (float)timeElapsed;
     }
-    if (keys[GLFW_KEY_A] == GLFW_PRESS || keys[GLFW_KEY_A] == GLFW_REPEAT)
-    {
+    if (Input::key_pressed_down(GLFW_KEY_A)) {
         pos -= normalize(cross(frontVec, upVec)) * speed * (float)timeElapsed;
     }
-    if (keys[GLFW_KEY_Q] == GLFW_PRESS || keys[GLFW_KEY_Q] == GLFW_REPEAT)
-    {
+    if (Input::key_pressed_down(GLFW_KEY_Q)) {
         pos += upVec * speed * (float)timeElapsed;
     }
-    if (keys[GLFW_KEY_E] == GLFW_PRESS || keys[GLFW_KEY_E] == GLFW_REPEAT)
-    {
+    if (Input::key_pressed_down(GLFW_KEY_E)) {
         pos -= upVec * speed * (float)timeElapsed;
     }
 
-    static double prev_mouse_x = 0;
-    static double prev_mouse_y = 0;
+    vec2 mouse_change = Input::cursor_change();
 
-    if (prev_mouse_x == mouse_x && prev_mouse_y == mouse_y) return;
-    theta += mouse_x_diff * rotationSpeed;
-    phi -= mouse_y_diff * rotationSpeed;
-    prev_mouse_x = mouse_x;
-    prev_mouse_y = mouse_y;
+    if (length(mouse_change) < FLT_EPSILON) return;
+
+    theta += mouse_change.x * rotationSpeed;
+    phi -= mouse_change.y * rotationSpeed;
 
     if (phi > 89.0f)
         phi = 89.0f;

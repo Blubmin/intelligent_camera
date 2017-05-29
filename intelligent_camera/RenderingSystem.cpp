@@ -5,12 +5,13 @@
 #include <glm\gtc\matrix_transform.hpp>
 #include <glm\gtc\type_ptr.hpp>
 
-#include "GLSL.h"
+#include "engine_base\GLSL.h"
+#include "engine_base\Position.h"
+#include "engine_base\Rotation.h"
+#include "engine_base\Scale.h"
+
 #include "Globals.h"
 #include "Player.h"
-#include "Position.h"
-#include "Rotation.h"
-#include "Scale.h"
 #include "World.h"
 
 using namespace glm;
@@ -64,12 +65,16 @@ void RenderingSystem::drawEntities(shared_ptr<World> world) {
             else {
                 bindMaterial(model->materials[mesh.materialIdx]);
             }
+<<<<<<< Updated upstream
 
             drawMesh(mesh, view_hull ? GL_LINE : GL_FILL);
 
             glUniform3f(this->phong.getUniformHandle("uDiffuseColor"), 1, 0, 0);
             glDisable(GL_CULL_FACE);
             drawMesh(model->hulls.at(j), view_hull ? GL_FILL : GL_LINE);
+=======
+            drawMesh(mesh, GL_FILL);
+>>>>>>> Stashed changes
         }
     }
     glUseProgram(0);

@@ -5,9 +5,9 @@
 
 #include <glm\glm.hpp>
 
-#include "Entity.h"
-#include "Material.h"
-#include "Program.h"
+#include <engine_base\Entity.h>
+#include <engine_base\Material.h>
+#include <engine_base\Program.h>
 
 class Mesh;
 class World;

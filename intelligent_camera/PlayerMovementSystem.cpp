@@ -6,8 +6,9 @@
 
 #include <rapidjson\filereadstream.h>
 
+#include <engine_base\Position.h>
+
 #include "Globals.h"
-#include "Position.h"
 #include "World.h"
 
 using namespace rapidjson;

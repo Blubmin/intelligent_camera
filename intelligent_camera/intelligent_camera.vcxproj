@@ -70,7 +70,12 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>C:\Users\Ian\Documents\Classwork\Thesis\intelligent_camera;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>C:\Users\Ian\Documents\Classwork\Thesis\intelligent_camera;$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -132,25 +137,12 @@
     <ClCompile Include="BoidSystem.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="DebugCamera.cpp" />
-    <ClCompile Include="Component.cpp" />
-    <ClCompile Include="Entity.cpp" />
     <ClCompile Include="EntityFactory.cpp" />
-    <ClCompile Include="ExceptionWrapper.cpp" />
-    <ClCompile Include="GLSL.cpp" />
-    <ClCompile Include="imgui_impl_glfw_gl3.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Material.cpp" />
-    <ClCompile Include="Mesh.cpp" />
-    <ClCompile Include="ModelLoader.cpp" />
-    <ClCompile Include="Model.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerMovementSystem.cpp" />
-    <ClCompile Include="Position.cpp" />
-    <ClCompile Include="Program.cpp" />
     <ClCompile Include="QuickHull.cpp" />
     <ClCompile Include="RenderingSystem.cpp" />
-    <ClCompile Include="Rotation.cpp" />
-    <ClCompile Include="Scale.cpp" />
     <ClCompile Include="SplineCamera.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>
@@ -159,29 +151,19 @@
     <ClInclude Include="BoidSystem.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="DebugCamera.h" />
-    <ClInclude Include="Component.h" />
-    <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityFactory.h" />
-    <ClInclude Include="ExceptionWrapper.h" />
     <ClInclude Include="Globals.h" />
-    <ClInclude Include="GLSL.h" />
-    <ClInclude Include="imgui_impl_glfw_gl3.h" />
-    <ClInclude Include="Material.h" />
-    <ClInclude Include="Mesh.h" />
-    <ClInclude Include="ModelLoader.h" />
-    <ClInclude Include="Model.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerMovementSystem.h" />
-    <ClInclude Include="Position.h" />
-    <ClInclude Include="Program.h" />
     <ClInclude Include="QuickHull.h" />
     <ClInclude Include="RenderingSystem.h" />
-    <ClInclude Include="Rotation.h" />
-    <ClInclude Include="Scale.h" />
     <ClInclude Include="SplineCamera.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\engine_base\engine_base.vcxproj">
+      <Project>{f91b8b26-212f-4e3c-88be-4216b0a5e88e}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\imgui_lib\imgui_lib.vcxproj">
       <Project>{d26ffbe9-862e-474f-aba6-cf93d343736e}</Project>
     </ProjectReference>

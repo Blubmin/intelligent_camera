@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Component.h"
+#include <engine_base\Component.h>
 
 #include <glm\glm.hpp>
 

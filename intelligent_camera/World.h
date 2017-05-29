@@ -3,9 +3,16 @@
 #include <memory>
 #include <vector>
 
+#include <engine_base\Entity.h>
+
 #include "SplineCamera.h"
+<<<<<<< Updated upstream
 #include "DebugCamera.h"
 #include "Entity.h"
+=======
+#include "BlenderCamera.h"
+
+>>>>>>> Stashed changes
 #include "EntityFactory.h"
 #include "RenderingSystem.h"
 #include "PlayerMovementSystem.h"

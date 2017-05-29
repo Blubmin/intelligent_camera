@@ -5,7 +5,13 @@
 
 #include <glm\glm.hpp>
 
+<<<<<<< Updated upstream
 #include "Mesh.h"
+=======
+#include <engine_base\Mesh.h>
+
+#include "Globals.h"
+>>>>>>> Stashed changes
 
 using namespace glm;
 using namespace std;

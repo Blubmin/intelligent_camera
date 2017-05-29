@@ -1,9 +1,10 @@
 #include "EntityFactory.h"
 
+#include <engine_base\Position.h>
+#include <engine_base\Rotation.h>
+#include <engine_base\Scale.h>
+
 #include "Player.h"
-#include "Position.h"
-#include "Rotation.h"
-#include "Scale.h"
 #include "World.h"
 
 using namespace std;

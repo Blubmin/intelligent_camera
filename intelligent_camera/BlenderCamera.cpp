@@ -5,7 +5,7 @@
 #include <GLFW\glfw3.h>
 #include <glm\gtc\matrix_transform.hpp>
 
-#include "Globals.h"
+#include <engine_base\Input.h>
 
 using namespace glm;
 
@@ -24,20 +24,25 @@ BlenderCamera::~BlenderCamera()
 void BlenderCamera::update(double timeElapsed)
 {
     vec3 forward = this->lookAtPt - this->pos;
-    this->pos += forward * this->zoomSpeed * (float) timeElapsed * (float) scroll;
+    this->pos += forward * this->zoomSpeed * (float) timeElapsed * (float) Input::scroll().y;
 
-    static double prev_mouse_x = 0;
-    static double prev_mouse_y = 0;
+    vec2 mouse_change = Input::cursor_change();
 
-    if (prev_mouse_x == mouse_x && prev_mouse_y == mouse_y) return;
+    if (length(mouse_change) < FLT_EPSILON) return;
 
-    if (mouse_buttons[GLFW_MOUSE_BUTTON_MIDDLE] != GLFW_PRESS) return;
+    if (!Input::button_pressed_down(GLFW_MOUSE_BUTTON_MIDDLE)) return;
 
-    if (mods & GLFW_MOD_SHIFT) {
+    if (Input::key_pressed_down(GLFW_KEY_LEFT_SHIFT)) {
         vec3 shift_vec = normalize(cross(this->pos - this->lookAtPt, vec3(0, 1, 0)));
+<<<<<<< Updated upstream
         vec3 shift = shift_vec * (float)(mouse_x_diff * timeElapsed);
         vec3 up_shift_vec = normalize(cross(this->pos - this->lookAtPt, shift_vec));
         vec3 up_shift = up_shift_vec * (float)(-mouse_y_diff * timeElapsed);
+=======
+        vec3 shift = shift_vec * (float)(mouse_change.x * timeElapsed) * moveSpeed;
+        vec3 up_shift_vec = normalize(cross(this->pos - this->lookAtPt, shift_vec));
+        vec3 up_shift = up_shift_vec * (float)(-mouse_change.y * timeElapsed) * moveSpeed;
+>>>>>>> Stashed changes
         this->pos += shift;
         this->lookAtPt += shift;
         this->pos += up_shift;
@@ -45,13 +50,10 @@ void BlenderCamera::update(double timeElapsed)
     }
     else {
         this->pos -= this->lookAtPt;
-        this->pos = rotate(mat4(), (float)(-mouse_x_diff * timeElapsed), vec3(0, 1, 0)) * vec4(this->pos, 1);
-        this->pos = rotate(mat4(), (float)(mouse_y_diff * timeElapsed), cross(this->pos, vec3(0, 1, 0))) * vec4(this->pos, 1);
+        this->pos = rotate(mat4(), (float)(-mouse_change.x * timeElapsed), vec3(0, 1, 0)) * vec4(this->pos, 1);
+        this->pos = rotate(mat4(), (float)(mouse_change.y * timeElapsed), cross(this->pos, vec3(0, 1, 0))) * vec4(this->pos, 1);
         this->pos += this->lookAtPt;
     }
-
-    prev_mouse_x = mouse_x;
-    prev_mouse_y = mouse_y;
 }
 
 mat4 BlenderCamera::getViewMatrix()

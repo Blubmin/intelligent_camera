@@ -2,8 +2,8 @@
 
 #include <memory>
 
-#include "ModelLoader.h"
-#include "Model.h"
+#include "engine_base\Model.h"
+#include "engine_base\ModelLoader.h"
 
 class World;
 
