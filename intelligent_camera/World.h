@@ -5,14 +5,8 @@
 
 #include <engine_base\Entity.h>
 
-#include "SplineCamera.h"
-<<<<<<< Updated upstream
-#include "DebugCamera.h"
-#include "Entity.h"
-=======
+#include "Camera.h"
 #include "BlenderCamera.h"
-
->>>>>>> Stashed changes
 #include "EntityFactory.h"
 #include "RenderingSystem.h"
 #include "PlayerMovementSystem.h"
@@ -29,7 +23,9 @@ public:
     std::vector<std::shared_ptr<Entity>> entities;
     EntityFactory factory;
     // SplineCamera camera;
-    DebugCamera camera;
+    // DebugCamera camera;
+    // BlenderCamera camera;
+    Camera* camera;
     RenderingSystem renderer;
     PlayerMovementSystem movement;
 };

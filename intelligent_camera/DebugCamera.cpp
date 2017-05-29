@@ -11,7 +11,7 @@ DebugCamera::DebugCamera() {}
 
 DebugCamera::DebugCamera(vec3 starting_pos)
 {
-    pos = starting_pos;
+    _pos = starting_pos;
     frontVec = -normalize(starting_pos);
     theta = degrees(atan(frontVec.x / frontVec.z));
     phi = degrees(atan(frontVec.y / length(vec2(frontVec.x, frontVec.z))));
@@ -27,22 +27,22 @@ DebugCamera::~DebugCamera()
 void DebugCamera::update(double timeElapsed)
 {
     if (Input::key_pressed_down(GLFW_KEY_W)) {
-        pos += frontVec * speed * (float) timeElapsed;
+        _pos += frontVec * speed * (float) timeElapsed;
     }
     if (Input::key_pressed_down(GLFW_KEY_S)) {
-        pos -= frontVec * speed * (float)timeElapsed;
+        _pos -= frontVec * speed * (float)timeElapsed;
     }
     if (Input::key_pressed_down(GLFW_KEY_D)) {
-        pos += normalize(cross(frontVec, upVec)) * speed * (float)timeElapsed;
+        _pos += normalize(cross(frontVec, upVec)) * speed * (float)timeElapsed;
     }
     if (Input::key_pressed_down(GLFW_KEY_A)) {
-        pos -= normalize(cross(frontVec, upVec)) * speed * (float)timeElapsed;
+        _pos -= normalize(cross(frontVec, upVec)) * speed * (float)timeElapsed;
     }
     if (Input::key_pressed_down(GLFW_KEY_Q)) {
-        pos += upVec * speed * (float)timeElapsed;
+        _pos += upVec * speed * (float)timeElapsed;
     }
     if (Input::key_pressed_down(GLFW_KEY_E)) {
-        pos -= upVec * speed * (float)timeElapsed;
+        _pos -= upVec * speed * (float)timeElapsed;
     }
 
     vec2 mouse_change = Input::cursor_change();
@@ -66,5 +66,5 @@ void DebugCamera::update(double timeElapsed)
 
 mat4 DebugCamera::getViewMatrix()
 {
-    return lookAt(pos, pos + frontVec, upVec);
+    return lookAt(_pos, _pos + frontVec, upVec);
 }

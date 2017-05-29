@@ -30,7 +30,6 @@ private:
     std::weak_ptr<World> world;
     std::vector<glm::vec3> controlPoints;
     std::vector<CurveStep> curveSteps;
-    glm::vec3 pos;
     glm::vec3 lookAtPt;
 
     double total_dist;

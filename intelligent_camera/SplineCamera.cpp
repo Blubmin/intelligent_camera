@@ -81,12 +81,12 @@ void SplineCamera::update(double timeElapsed)
         CurveStep info = curveSteps[i];
         float remaining = dist - info.dist;
         float step = remaining / (curveSteps[(i + 1) % curveSteps.size()].dist - info.dist) * this->step_size;
-        this->pos = calcPosition((int)info.t, fmod(info.t, 1) + step);
+        _pos = calcPosition((int)info.t, fmod(info.t, 1) + step);
         return;
     }
 }
 
 mat4 SplineCamera::getViewMatrix()
 {
-    return lookAt(this->pos, this->lookAtPt, vec3(0, 1, 0));
+    return lookAt(_pos, this->lookAtPt, vec3(0, 1, 0));
 }

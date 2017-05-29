@@ -13,7 +13,7 @@ public:
     glm::mat4 getViewMatrix();
 
     glm::vec3 lookAtPt;
-    glm::vec3 pos;
     float zoomSpeed;
+    float moveSpeed;
 };
 

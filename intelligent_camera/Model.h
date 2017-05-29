@@ -16,6 +16,8 @@ public:
     Model(const aiScene* scene);
     ~Model();
 
+    void calc_hulls();
+
     std::vector<Mesh> meshes;
     std::vector<Mesh> hulls;
     std::vector<Material> materials;

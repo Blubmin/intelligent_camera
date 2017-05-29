@@ -2,6 +2,7 @@
 
 #include <iostream>
 
+#include "Globals.h"
 #include "QuickHull.h"
 
 using namespace std;
@@ -18,19 +19,17 @@ Model::Model(const aiScene* scene) : Component(COMPONENT_MODEL)
     {
         Mesh mesh = Mesh(scene->mMeshes[i]);
         meshes.push_back(mesh);
-        Mesh hull = QuickHull::GenerateHull(mesh);
-        hulls.push_back(hull);
     }
 
     shiftUpToGround();
     shrink();
 
+    calc_hulls();
+
     for (int i = 0; i < this->meshes.size(); i++) {
         this->meshes[i].bindBuffers();
-        this->hulls[i].bindBuffers();
     }
         
-
     materials = vector<Material>();
     for (int i = 0; i < scene->mNumMaterials; i++)
     {
@@ -55,12 +54,6 @@ void Model::shiftUpToGround()
         for (int j = 0; j < this->meshes[i].verts.size(); j++)
         {
             this->meshes[i].verts[j].y -= miny;
-        }
-    }
-
-    for (int i = 0; i < this->hulls.size(); i++) {
-        for (int j = 0; j < this->hulls[i].verts.size(); j++) {
-            this->hulls[i].verts[j].y -= miny;
         }
     }
 }
@@ -98,14 +91,18 @@ void Model::shrink()
             this->meshes[i].verts[j] /= max_diff;
         }
     }
-
-    for (int i = 0; i < this->hulls.size(); i++) {
-        for (int j = 0; j < this->hulls[i].verts.size(); j++) {
-            this->hulls[i].verts[j] /= max_diff;
-        }
-    }
 }
 
 Model::~Model()
 {
+}
+
+void Model::calc_hulls() {
+    hulls.clear();
+    for (auto m : meshes) {
+        Mesh hull = QuickHull::GenerateHull(m);
+        hull.bindBuffers();
+        hulls.push_back(hull);
+    }
+    calc_hull = false;
 }
