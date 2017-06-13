@@ -102,7 +102,7 @@ GLint Program::getAttributeHandle(string name)
     return handle;
 }
 
-GLint Program::getUniformHandle(string name)
+GLint Program::uniform(string name)
 {
     GLint handle;
     try

@@ -43,30 +43,33 @@ void RenderingSystem::drawEntities(shared_ptr<World> world) {
 
     mat4 viewMat = world->camera->getViewMatrix();
     vec3 camPos = world->camera->pos();
-    glUniformMatrix4fv(this->phong.getUniformHandle("uViewMatrix"), 1, GL_FALSE, value_ptr(viewMat));
-    glUniformMatrix4fv(this->phong.getUniformHandle("uProjMatrix"), 1, GL_FALSE, value_ptr(this->projection));
-    glUniform3f(this->phong.getUniformHandle("uDirLight"), 1, -1, -1);
-    glUniform3fv(this->phong.getUniformHandle("uCameraPos"), 1, value_ptr(camPos));
+    glUniformMatrix4fv(this->hull.uniform("uViewMatrix"), 1, GL_FALSE, value_ptr(viewMat));
+    glUniformMatrix4fv(this->hull.uniform("uProjMatrix"), 1, GL_FALSE, value_ptr(this->projection));
+    glUniform3f(this->hull.uniform("uDirLight"), 1, -1, -1);
+    GLSL::check_gl_error("Uniforms");
 
     for (int i = 0; i < world->entities.size(); i++) {
         shared_ptr<Entity> entity = world->entities[i];
         if (!entity->check_mask(this->mask))
             continue;
 
-        glUniformMatrix4fv(this->phong.getUniformHandle("uModelMatrix"), 1, GL_FALSE, value_ptr(getModelMatrix(entity)));
+        glUniformMatrix4fv(this->hull.uniform("uModelMatrix"), 1, GL_FALSE, value_ptr(getModelMatrix(entity)));
+        GLSL::check_gl_error("ModelMatrix");
 
-        shared_ptr<Model> model = dynamic_pointer_cast<Model>(entity->getComponent(COMPONENT_MODEL));
+        Model* model = (Model*)(entity->getComponent(COMPONENT_MODEL));
         for (int j = 0; j < model->meshes.size(); j++) {
             Mesh mesh = model->meshes.at(j);
             if (entity->check_mask(COMPONENT_PLAYER)) {
-                shared_ptr<Player> player = dynamic_pointer_cast<Player>(entity->getComponent(COMPONENT_PLAYER));
-                glUniform3fv(this->phong.getUniformHandle("uDiffuseColor"), 1, value_ptr(player->get_color()));
+                Player* player = (Player*)(entity->getComponent(COMPONENT_PLAYER));
+                glUniform3fv(this->hull.uniform("uDiffuseColor"), 1, value_ptr(player->get_color()));
             }
             else {
                 bindMaterial(model->materials[mesh.materialIdx]);
             }
+            GLSL::check_gl_error("Material");
 
             drawMesh(mesh, GL_FILL);
+            GLSL::check_gl_error("End");
         }
     }
     glUseProgram(0);
@@ -75,9 +78,9 @@ void RenderingSystem::drawEntities(shared_ptr<World> world) {
 mat4 RenderingSystem::getModelMatrix(shared_ptr<Entity> entity) {
     mat4 modelMatrix = mat4();
 
-    shared_ptr<Position> pos = dynamic_pointer_cast<Position>(entity->getComponent(COMPONENT_POSITION));
-    shared_ptr<Rotation> rot = dynamic_pointer_cast<Rotation>(entity->getComponent(COMPONENT_ROTATION));
-    shared_ptr<Scale> scale = dynamic_pointer_cast<Scale>(entity->getComponent(COMPONENT_SCALE));
+    Position* pos = (Position*)(entity->getComponent(COMPONENT_POSITION));
+    Rotation* rot = (Rotation*)(entity->getComponent(COMPONENT_ROTATION));
+    Scale* scale = (Scale*)(entity->getComponent(COMPONENT_SCALE));
 
     modelMatrix = glm::translate(modelMatrix, vec3(pos->position));
 
@@ -92,7 +95,7 @@ mat4 RenderingSystem::getModelMatrix(shared_ptr<Entity> entity) {
 
 void RenderingSystem::bindMaterial(Material material) {
     //glUniform3fv(this->phong.getUniformHandle("uAmbientColor"), 1, value_ptr(material.ambient));
-    glUniform3fv(this->phong.getUniformHandle("uDiffuseColor"), 1, value_ptr(material.diffuse));
+    glUniform3fv(this->hull.uniform("uDiffuseColor"), 1, value_ptr(material.diffuse));
     //glUniform3fv(this->phong.getUniformHandle("uSpecularColor"), 1, value_ptr(material.specular));
     //glUniform1fv(this->phong.getUniformHandle("uShininess"), 1, &material.shininess);
 }
@@ -127,9 +130,9 @@ void RenderingSystem::drawGrid(shared_ptr<World> world) {
     glUseProgram(this->grid.prog);
 
     mat4 viewMat = world->camera->getViewMatrix();
-    glUniformMatrix4fv(this->grid.getUniformHandle("uViewMatrix"), 1, GL_FALSE, value_ptr(viewMat));
-    glUniformMatrix4fv(this->grid.getUniformHandle("uProjMatrix"), 1, GL_FALSE, value_ptr(this->projection));
-    glUniformMatrix4fv(this->grid.getUniformHandle("uModelMatrix"), 1, GL_FALSE, value_ptr(mat4()));
+    glUniformMatrix4fv(this->grid.uniform("uViewMatrix"), 1, GL_FALSE, value_ptr(viewMat));
+    glUniformMatrix4fv(this->grid.uniform("uProjMatrix"), 1, GL_FALSE, value_ptr(this->projection));
+    glUniformMatrix4fv(this->grid.uniform("uModelMatrix"), 1, GL_FALSE, value_ptr(mat4()));
 
     glBindVertexArray(GRID_VAO);
     glDrawArrays(GL_LINES, 0, this->grid_points.size());

@@ -4,20 +4,25 @@
 #include <memory>
 #include <string>
 
+#include <glm\glm.hpp>
+
 #include "Component.h"
 
 class Entity
 {
-    unsigned long mask;
+    unsigned long _mask;
+    std::string _tag;
 
 public:
     Entity();
+    Entity(std::string tag);
     ~Entity();
 
-    void addComponent(std::shared_ptr<Component> component);
-    std::shared_ptr<Component> getComponent(unsigned long mask);
+    void addComponent(Component* component);
+    Component* getComponent(unsigned long mask);
     bool check_mask(unsigned long mask);
+    std::string tag();
 
-    std::map<unsigned long, std::shared_ptr<Component>> components;
+    std::map<unsigned long, Component*> components;
 };
 

@@ -13,7 +13,7 @@ public:
     ~Program();
 
     GLint getAttributeHandle(std::string name);
-    GLint getUniformHandle(std::string name);
+    GLint uniform(std::string name);
 
     GLuint prog;
     GLuint vert;

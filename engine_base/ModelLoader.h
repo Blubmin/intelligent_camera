@@ -3,19 +3,26 @@
 #include <map>
 #include <memory>
 #include <string>
+#include <vector>
 
 #include "Model.h"
 
 class ModelLoader
 {
-public:
     ModelLoader();
+    ModelLoader(std::string asset_folder);
     ~ModelLoader();
 
-    std::shared_ptr<Model> loadModelByName(const std::string& filename, std::string key);
-    std::shared_ptr<Model> getModelByName(std::string key);
+    std::string _folder;
+    std::map<std::string, Model*> models;
+    std::vector<std::string> _extensions;
 
-private:
-    std::map<std::string, std::shared_ptr<Model>> models;
+    static ModelLoader* _instance;
+
+public:
+    static void init(const std::string& asset_folder);
+    static Model* loadModelByName(const std::string& filename, std::string key);
+    static Model* getModelByName(std::string key);
+    
 };
 

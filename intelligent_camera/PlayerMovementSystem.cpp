@@ -46,7 +46,7 @@ void PlayerMovementSystem::move(shared_ptr<World> world) {
         if (!entity->check_mask(this->mask))
             continue;
 
-        shared_ptr<Position> pos = dynamic_pointer_cast<Position>(entity->getComponent(COMPONENT_POSITION));
+        Position* pos = (Position*)(entity->getComponent(COMPONENT_POSITION));
         pos->position.x = (*doc)[frame]["players"][player]["position"][0].GetDouble() / 5.0f;
         pos->position.y = (*doc)[frame]["players"][player]["position"][1].GetDouble() / 5.0f;
         pos->position.z = (*doc)[frame]["players"][player]["position"][2].GetDouble() / 5.0f;

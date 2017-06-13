@@ -11,7 +11,7 @@ using namespace std;
 
 EntityFactory::EntityFactory()
 {
-    this->ldr = ModelLoader();
+    ModelLoader::init("Models");
 }
 
 
@@ -21,43 +21,45 @@ EntityFactory::~EntityFactory()
 
 void EntityFactory::createBoid(std::shared_ptr<World> world, float x, float y, float z)
 {
-    shared_ptr<Entity> boid = make_shared<Entity>(Entity());
+    shared_ptr<Entity> boid = make_shared<Entity>(Entity("bird"));
 
-    shared_ptr<Model> model;
+    Model* model;
     try
     {
-        model = ldr.getModelByName("bird");
+        model = ModelLoader::getModelByName("bird");
     }
     catch (const exception& e)
     {
-        model = ldr.loadModelByName("Models/bird.3ds", "bird");
+        model = ModelLoader::loadModelByName("Models/bird.3ds", "bird");
     }
     boid->addComponent(model);
 
-    boid->addComponent(make_shared<Position>(Position(x, y, z)));
-    boid->addComponent(make_shared<Rotation>(-90, 0, 0));
-    boid->addComponent(make_shared<Scale>());
+    boid->addComponent(new Position(Position(x, y, z)));
+    boid->addComponent(new Rotation(-90, 0, 0));
+    boid->addComponent(new Scale());
 
     world->entities.push_back(boid);
 }
 
 void EntityFactory::createTree(std::shared_ptr<World> world, float x, float y, float z)
 {
-    shared_ptr<Entity> tree = make_shared<Entity>(Entity());
+    shared_ptr<Entity> tree = make_shared<Entity>(Entity("tree"));
 
-    shared_ptr<Model> model;
+    Model* model;
     try
     {
-        model = ldr.getModelByName("tree");
+        model = ModelLoader::getModelByName("tree2");
     }
     catch (const exception& e)
     {
-        model = ldr.loadModelByName("Models/tree2.obj", "tree");
+        model = ModelLoader::loadModelByName("Models/tree2.obj", "tree");
     }
+    
     tree->addComponent(model);
-    tree->addComponent(make_shared<Position>(Position(x, y, z)));
-    tree->addComponent(make_shared<Rotation>());
-    tree->addComponent(make_shared<Scale>(5));
+
+    tree->addComponent(new Position(x, y, z));
+    tree->addComponent(new Rotation());
+    tree->addComponent(new Scale(5));
 
     world->entities.push_back(tree);
 }
@@ -65,22 +67,22 @@ void EntityFactory::createTree(std::shared_ptr<World> world, float x, float y, f
 
 void EntityFactory::createPlayer(std::shared_ptr<World> world, float x, float y, float z, int label)
 {
-    shared_ptr<Entity> player = make_shared<Entity>(Entity());
+    shared_ptr<Entity> player = make_shared<Entity>(Entity("player"));
 
-    shared_ptr<Model> model;
+    Model* model;
     try
     {
-        model = ldr.getModelByName("tree");
+        model = ModelLoader::getModelByName("tree");
     }
     catch (const exception& e)
     {
-        model = ldr.loadModelByName("Models/sphere.obj", "tree");
+        model = ModelLoader::loadModelByName("Models/sphere.obj", "tree");
     }
     player->addComponent(model);
-    player->addComponent(make_shared<Player>(Player(label)));
-    player->addComponent(make_shared<Position>(Position(x, y, z)));
-    player->addComponent(make_shared<Rotation>());
-    player->addComponent(make_shared<Scale>(5));
+    player->addComponent(new Player(Player(label)));
+    player->addComponent(new Position(Position(x, y, z)));
+    player->addComponent(new Rotation());
+    player->addComponent(new Scale(5));
 
     world->entities.push_back(player);
 }

@@ -1,28 +1,42 @@
 #include "Entity.h"
 
+#include "Model.h"
+
 using namespace std;
 
-Entity::Entity()
-{
-    this->mask = 0;
-    this->components = map<unsigned long, shared_ptr<Component>>();
+Entity::Entity() : Entity("") {
+
+}
+
+Entity::Entity(std::string tag) {
+    _tag = tag;
+    this->_mask = 0;
+    this->components = map<unsigned long, Component*>();
 }
 
 Entity::~Entity()
 {
+    for (auto c : components) {
+        if (dynamic_cast<Model*>(c.second)) continue;
+        delete c.second;
+    }
 }
 
-void Entity::addComponent(std::shared_ptr<Component> component)
+void Entity::addComponent(Component* component)
 {
-    mask |= component->mask;
+    _mask |= component->mask;
     this->components[component->mask] = component;
 }
 
-shared_ptr<Component> Entity::getComponent(unsigned long mask)
+Component* Entity::getComponent(unsigned long mask)
 {
     return this->components.at(mask);
 }
 
 bool Entity::check_mask(unsigned long mask) {
-    return (this->mask & mask) == mask;
+    return (this->_mask & mask) == mask;
+}
+
+std::string Entity::tag() {
+    return _tag;
 }
