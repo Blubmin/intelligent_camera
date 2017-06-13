@@ -19,6 +19,8 @@
 #include <engine_base\ModelLoader.h>
 #include <engine_base\Scene.h>
 
+#include "SelectionSystem.h"
+
 using namespace glm;
 using namespace std;
 
@@ -63,6 +65,8 @@ void run() {
     // GLEW throws some errors, so discard all the errors so far
     while (glGetError() != GL_NO_ERROR) {}
 
+    glEnable(GL_STENCIL_TEST);
+    glClearStencil(0);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
@@ -78,6 +82,7 @@ void run() {
     BasicCamera* camera = new BasicCamera(vec3(0, 2, -5));
     BasicCamera* camera2 = new BasicCamera(vec3(0, 1, -5));
     DebugRenderer* renderer = new DebugRenderer(new FlatRenderer(), vec2(1280 - (1280 / 3) - 1, 0), 0.3333f);
+    SelectionSystem* selection = new SelectionSystem();
     scene->add_entity(EntityFactory::create_entity("tree", vec3(), vec3(), vec3(5)));
     scene->add_entity(EntityFactory::create_entity("bush", vec3(2, 0, 3), vec3(), vec3(2)));
     scene->add_entity(EntityFactory::create_entity("rock", vec3(0, -1.0, 5), vec3(), vec3(3)));
@@ -104,9 +109,11 @@ void run() {
 
         camera->update(timeElapsed);
         scene->update(timeElapsed);
-        renderer->draw(scene, camera2);
+        
+        selection->update(timeElapsed, scene, camera);
+
         scene->draw(camera);
-           
+        renderer->draw(scene, camera2);
 
 #ifdef _DEBUG
         GLSL::check_gl_error("End of loop");

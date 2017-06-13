@@ -39,9 +39,7 @@ glm::vec3 Scene::dir_light() {
 
 void Scene::update(float time_elapsed) {
     for (auto s : _systems) {
-        for (auto e : _entites) {
-            s->update(time_elapsed, e);
-        }      
+         s->update(time_elapsed, this);    
     }
 }
 

@@ -120,7 +120,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="IndexRenderer.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="SelectionSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\engine_base\engine_base.vcxproj">
@@ -132,6 +134,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="IndexRenderer.h" />
+    <ClInclude Include="SelectionSystem.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
