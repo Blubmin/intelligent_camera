@@ -26,4 +26,5 @@ public:
     ~DebugRenderer();
 
     void draw(Scene* scene, ICamera* camera);
+    GLuint texture();
 };

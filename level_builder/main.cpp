@@ -22,8 +22,17 @@
 using namespace glm;
 using namespace std;
 
+bool hide = true;
+
 static void error_callback(int error, const char* description) {
     fprintf(stderr, "Error: %s\n", description);
+}
+
+void check_input() {
+    if (Input::key_pressed_down(GLFW_KEY_H, GLFW_MOD_CONTROL)) {
+        hide = !hide;
+        glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, hide ? GLFW_CURSOR_DISABLED: GLFW_CURSOR_NORMAL);
+    }
 }
 
 void run() {
@@ -62,6 +71,7 @@ void run() {
     //glEnable(GL_BLEND); 
     //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+    ImGui_ImplGlfwGL3_Init(window, false);
     Input::init(window);
     ModelLoader::init("assets");
     Scene* scene = new Scene();
@@ -82,24 +92,34 @@ void run() {
     while (!Input::key_pressed_down(GLFW_KEY_ESCAPE)) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        check_input();
+
         double newTime = glfwGetTime();
         double timeElapsed = newTime - oldTime;
 
+        ImGui_ImplGlfwGL3_NewFrame();
+        ImGui::Begin("Test");
+        ImGui::ImageButton((void*)renderer->texture(), ImVec2(100, 100), ImVec2(0, 1), ImVec2(1, 0));
+        ImGui::End();
+
         camera->update(timeElapsed);
         scene->update(timeElapsed);
-        scene->draw(camera);
         renderer->draw(scene, camera2);
+        scene->draw(camera);
+           
 
 #ifdef _DEBUG
         GLSL::check_gl_error("End of loop");
 #endif
         oldTime = newTime;
 
+        ImGui::Render();
         glfwSwapBuffers(window);
         Input::clear();
         glfwPollEvents();
     }
     glfwDestroyWindow(window);
+    ImGui_ImplGlfwGL3_Shutdown();
     glfwTerminate();
 }
 

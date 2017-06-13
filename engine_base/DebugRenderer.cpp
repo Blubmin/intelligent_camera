@@ -20,7 +20,7 @@ DebugRenderer::DebugRenderer(IRenderer* renderer, glm::vec2 pos, float scale) : 
 
     int width, height;
     glfwGetWindowSize(glfwGetCurrentContext(), &width, &height);
-    _pos = vec2((pos.x / (float)width) * 2, -(pos.y / (float)height) * 2);
+    _pos = pos;
     _scale = scale;
 
     vector<vec3> verts;
@@ -97,28 +97,34 @@ DebugRenderer::~DebugRenderer() {}
 void DebugRenderer::draw(Scene * scene, ICamera * camera) {
     GLint prev_fbo;
     glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &prev_fbo);
+    GLint viewport[4];
+    glGetIntegerv(GL_VIEWPORT, viewport);
 
     glBindFramebuffer(GL_FRAMEBUFFER, _fbo);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);    
+    
     _child->draw(scene, camera);
+    
     glBindFramebuffer(GL_FRAMEBUFFER, prev_fbo);
-
+    
     glUseProgram(_prog->prog);
+    glViewport(_pos.x, _pos.y, 1280 * _scale, 720 * _scale);
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, _tex);
     
     glUniform1i(_prog->uniform("uTex"), 0);
-    glUniform2fv(_prog->uniform("uPos"), 1, value_ptr(_pos));
-    glUniform1f(_prog->uniform("uScale"), _scale);
 
     glBindVertexArray(_vao);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-    glDrawArrays(GL_LINE_LOOP, 0, 4);
     glBindVertexArray(0);
 
+    glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
     glBindTexture(GL_TEXTURE_2D, 0);
 
     glUseProgram(0);
+}
+
+GLuint DebugRenderer::texture() {
+    return _tex;
 }
