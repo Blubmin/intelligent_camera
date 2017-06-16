@@ -91,6 +91,11 @@ void Input::init(GLFWwindow* window) {
 void Input::clear() {
     _cur_delta = vec2();
     _scroll = vec2();
+
+    for (int i = 0; i < GLFW_KEY_LAST; i++)
+        if (_keys[i] == KEY_PRESSED) _keys[i] = KEY_DOWN;
+    for (int i = 0; i < GLFW_KEY_LAST; i++)
+        if (_buttons[i] == BUTTON_PRESSED) _buttons[i] = BUTTON_DOWN;
 }
 
 bool Input::key_state_match(int key, KeyState state, int mods) {

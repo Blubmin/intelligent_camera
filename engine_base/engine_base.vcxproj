@@ -143,6 +143,8 @@
     <ClCompile Include="Rotation.cpp" />
     <ClCompile Include="Scale.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="StaticCamera.cpp" />
+    <ClCompile Include="TextureRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BasicCamera.h" />
@@ -167,6 +169,8 @@
     <ClInclude Include="Scale.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="ISystem.h" />
+    <ClInclude Include="StaticCamera.h" />
+    <ClInclude Include="TextureRenderer.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\imgui_lib\imgui_lib.vcxproj">

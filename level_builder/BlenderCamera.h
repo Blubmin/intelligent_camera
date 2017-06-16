@@ -1,16 +1,20 @@
 #pragma once
 
-#include "Camera.h"
+#include <engine_base\ICamera.h>
 
 #include <glm/glm.hpp>
 
-class BlenderCamera : public Camera
+class BlenderCamera : public ICamera
 {
+
+    glm::vec3 _pos;
+
 public:
     BlenderCamera();
     ~BlenderCamera();
-    void update(double timeElapsed);
+    void update(float timeElapsed);
     glm::mat4 getViewMatrix();
+    glm::mat4 getProjectionMatrix();
 
     glm::vec3 lookAtPt;
     float zoomSpeed;

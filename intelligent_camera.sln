@@ -11,6 +11,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "engine_base", "engine_base\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "level_builder", "level_builder\level_builder.vcxproj", "{F9B70B4A-7179-4C59-9632-7524FE458517}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tinyfiledialogs", "tinyfiledialogs\tinyfiledialogs.vcxproj", "{43ABD584-A852-4AAF-838F-029898EF818C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -51,6 +53,14 @@ Global
 		{F9B70B4A-7179-4C59-9632-7524FE458517}.Release|x64.Build.0 = Release|x64
 		{F9B70B4A-7179-4C59-9632-7524FE458517}.Release|x86.ActiveCfg = Release|Win32
 		{F9B70B4A-7179-4C59-9632-7524FE458517}.Release|x86.Build.0 = Release|Win32
+		{43ABD584-A852-4AAF-838F-029898EF818C}.Debug|x64.ActiveCfg = Debug|x64
+		{43ABD584-A852-4AAF-838F-029898EF818C}.Debug|x64.Build.0 = Debug|x64
+		{43ABD584-A852-4AAF-838F-029898EF818C}.Debug|x86.ActiveCfg = Debug|Win32
+		{43ABD584-A852-4AAF-838F-029898EF818C}.Debug|x86.Build.0 = Debug|Win32
+		{43ABD584-A852-4AAF-838F-029898EF818C}.Release|x64.ActiveCfg = Release|x64
+		{43ABD584-A852-4AAF-838F-029898EF818C}.Release|x64.Build.0 = Release|x64
+		{43ABD584-A852-4AAF-838F-029898EF818C}.Release|x86.ActiveCfg = Release|Win32
+		{43ABD584-A852-4AAF-838F-029898EF818C}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

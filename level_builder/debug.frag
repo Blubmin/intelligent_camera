@@ -8,5 +8,5 @@ out vec4 color;
 
 void main()
 {
-    color = texture(uTex, vTex);
+    color = vec4(vec3(texture(uTex, vTex)), 1);
 } 

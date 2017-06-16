@@ -24,9 +24,33 @@
     <ClCompile Include="IndexRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Selected.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SelectionRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BlenderCamera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="debug.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="debug.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="flat.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="flat.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="outline.frag">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SelectionSystem.h">
@@ -35,5 +59,19 @@
     <ClInclude Include="IndexRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Selected.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SelectionRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BlenderCamera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="outline.vert">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

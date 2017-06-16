@@ -12,11 +12,9 @@
 using namespace glm;
 using namespace std;
 
-DebugRenderer::DebugRenderer() : DebugRenderer(nullptr, vec2(), 1.f) {}
-
-DebugRenderer::DebugRenderer(IRenderer* renderer, glm::vec2 pos, float scale) : IRenderer(0) {
+DebugRenderer::DebugRenderer(GLuint texture, glm::vec2 pos, float scale) : IRenderer(0) {
     _prog = new Program("debug.vert", "debug.frag");
-    _child = renderer;
+    _tex = texture;
 
     int width, height;
     glfwGetWindowSize(glfwGetCurrentContext(), &width, &height);
@@ -70,45 +68,20 @@ DebugRenderer::DebugRenderer(IRenderer* renderer, glm::vec2 pos, float scale) : 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-    glGenFramebuffers(1, &_fbo);
-    glBindFramebuffer(GL_FRAMEBUFFER, _fbo);
-
-    glGenTextures(1, &_tex);
-    glBindTexture(GL_TEXTURE_2D, _tex);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32F, width, height, 0, GL_RGB, GL_FLOAT, NULL);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _tex, 0);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-    GLuint depth;
-    glGenTextures(1, &depth);
-    glBindTexture(GL_TEXTURE_2D, depth);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depth, 0);
-
-    glBindTexture(GL_TEXTURE_2D, 0);
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    
 }
 
 DebugRenderer::~DebugRenderer() {}
 
 void DebugRenderer::draw(Scene * scene, ICamera * camera) {
-    GLint prev_fbo;
-    glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &prev_fbo);
     GLint viewport[4];
     glGetIntegerv(GL_VIEWPORT, viewport);
+    
+    int width, height;
+    glfwGetWindowSize(glfwGetCurrentContext(), &width, &height);
 
-    glBindFramebuffer(GL_FRAMEBUFFER, _fbo);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);    
-    
-    _child->draw(scene, camera);
-    
-    glBindFramebuffer(GL_FRAMEBUFFER, prev_fbo);
-    
     glUseProgram(_prog->prog);
-    glViewport(_pos.x, _pos.y, 1280 * _scale, 720 * _scale);
+    glViewport(_pos.x, _pos.y, width * _scale, height * _scale);
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, _tex);

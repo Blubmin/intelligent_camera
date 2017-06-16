@@ -56,7 +56,8 @@ void IndexRenderer::draw(Scene * scene, ICamera* cam) {
     for (auto e : scene->entities()) {
         if (!e->check_mask(_mask)) continue;
 
-        glStencilFunc(GL_ALWAYS, i + 1, -1);
+        //glStencilFunc(GL_GEQUAL, 2, 0xFF);
+        glStencilFunc(GL_ALWAYS, i + 1, 0xFF);
         glUniformMatrix4fv(_prog->uniform("uModelMatrix"), 1, GL_FALSE, value_ptr(create_model_matrix(e)));
 
         Model* model = (Model*)e->getComponent(COMPONENT_MODEL);

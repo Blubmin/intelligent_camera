@@ -72,3 +72,11 @@ Model* ModelLoader::getModelByName(string key)
     }
     return _instance->models.at(key);
 }
+
+std::vector<std::string> ModelLoader::keys() {
+    vector<string> keys;
+    for (auto p : _instance->models) {
+        keys.push_back(p.first);
+    }
+    return keys;
+}

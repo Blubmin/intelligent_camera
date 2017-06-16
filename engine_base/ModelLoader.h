@@ -23,6 +23,6 @@ public:
     static void init(const std::string& asset_folder);
     static Model* loadModelByName(const std::string& filename, std::string key);
     static Model* getModelByName(std::string key);
-    
+    static std::vector<std::string> keys();
 };
 

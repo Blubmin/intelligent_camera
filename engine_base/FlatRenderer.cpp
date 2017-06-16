@@ -37,11 +37,11 @@ glm::mat4 FlatRenderer::create_model_matrix(Entity* entity) {
 
     dest = glm::translate(dest, vec3(pos->position));
 
-    dest = glm::scale(dest, vec3(scale->x, scale->y, scale->z));
-
     dest = glm::rotate(dest, rot->phi, vec3(1, 0, 0));
     dest = glm::rotate(dest, rot->theta, vec3(0, 1, 0));
     dest = glm::rotate(dest, rot->psi, vec3(0, 0, 1));
+
+    dest = glm::scale(dest, vec3(scale->x, scale->y, scale->z));
 
     return dest;
 }

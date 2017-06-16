@@ -8,5 +8,5 @@ out vec4 color;
 
 void main()
 {
-    color = texture(uTex, vTex);
+    color = texture(uTex, vTex).rgba;
 } 

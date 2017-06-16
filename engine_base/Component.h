@@ -2,6 +2,7 @@
 
 class Component
 {
+
 public:
     Component();
     Component(unsigned long mask);
