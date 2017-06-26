@@ -1,11 +1,14 @@
 #include "Scene.h"
 
+#include <fstream>
+
 #include "FlatRenderer.h"
 #include "ICamera.h"
 #include "IRenderer.h"
 #include "ISystem.h"
 
 using namespace glm;
+using namespace std;
 
 Scene::Scene() {
     _dir_light = vec3(1, -1, 1);
@@ -45,4 +48,16 @@ void Scene::update(float time_elapsed) {
 
 void Scene::draw(ICamera* cam) {
     _renderer->draw(this, cam);
+}
+
+void Scene::save(const std::string & filename)
+{
+    ofstream out;
+    out.open(filename, ofstream::trunc);
+
+    out << "{" << endl;
+    out << "\tmodels: [" << endl;
+
+    out << "]" << endl;
+    out << "}" << endl;
 }

@@ -1,5 +1,6 @@
 #include <conio.h>
 #include <iostream>
+#include <string.h>
 #include <vector>
 
 #include <GL\glew.h>
@@ -24,6 +25,7 @@
 #include <engine_base\Scene.h>
 #include <engine_base\StaticCamera.h>
 #include <engine_base\TextureRenderer.h>
+#include <engine_base\Utility.h>
 
 #include "BlenderCamera.h"
 #include "IndexRenderer.h"
@@ -126,17 +128,17 @@ void run() {
     
     SelectionSystem* selection = new SelectionSystem();
     scene->set_renderer(new SelectionRenderer());
-    scene->add_entity(create_entity("tree", vec3(), vec3(), vec3(5)));
-    scene->add_entity(create_entity("bush", vec3(2, 0, 3), vec3(), vec3(2)));
-    scene->add_entity(create_entity("rock", vec3(0, -1.0, 5), vec3(), vec3(3)));
-    scene->add_entity(create_entity("floor", vec3(), vec3(), vec3(100)));
+    //scene->add_entity(create_entity("tree", vec3(), vec3(), vec3(5)));
+    //scene->add_entity(create_entity("bush", vec3(2, 0, 3), vec3(), vec3(2)));
+    //scene->add_entity(create_entity("rock", vec3(0, -1.0, 5), vec3(), vec3(3)));
+    //scene->add_entity(create_entity("floor", vec3(), vec3(), vec3(100)));
 
     keys = ModelLoader::keys();
     for (auto k : keys) {
         render_model(k);
     }
     GLSL::check_gl_error("Render_Once");
-    DebugRenderer* renderer = new DebugRenderer(models[0]->color(), vec2(width - (width / 3) - 1, 0), 0.3333f);
+    DebugRenderer* renderer = new DebugRenderer(texture->color(), vec2(width - (width / 3) - 1, 0), 0.3333f);
 
     glClearColor(100 / 255.f, 149 / 255.f, 237 / 255.f, 1.0f);
 
@@ -179,11 +181,14 @@ void run() {
         ImGui::ListBoxFooter();
         ImGui::PushItemWidth(-1);
         if (ImGui::Button("Import Model")) {
-            const char* file = tinyfd_openFileDialog("Select a file", "", 0, NULL, "model file", false);
-            if (file != NULL) {
-                ModelLoader::loadModelByName(file, "test");
-                keys.push_back("test");
-                render_model("test");
+            char const * filterPatterns[3] = { "*.obj" , "*.stl" , "*.dxf" };
+
+            const char* file = tinyfd_openFileDialog("Select a file", "", 1, filterPatterns, "model file", false);
+            if (file != NULL) {          
+                vector<string> path = split(string(file), '\\');
+                ModelLoader::loadModelByName(file, path.back());
+                render_model(path.back());
+                keys.push_back(path.back());
             }
         }
         ImGui::End();

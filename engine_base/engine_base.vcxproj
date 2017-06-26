@@ -173,10 +173,14 @@
     <ClInclude Include="ISystem.h" />
     <ClInclude Include="StaticCamera.h" />
     <ClInclude Include="TextureRenderer.h" />
+    <ClInclude Include="Utility.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\imgui_lib\imgui_lib.vcxproj">
       <Project>{d26ffbe9-862e-474f-aba6-cf93d343736e}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\tinyfiledialogs\tinyfiledialogs.vcxproj">
+      <Project>{43abd584-a852-4aaf-838f-029898ef818c}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

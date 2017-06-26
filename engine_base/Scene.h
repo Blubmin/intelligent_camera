@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include <vector>
 
 #include <glm\glm.hpp>
@@ -24,5 +25,6 @@ public:
     glm::vec3 dir_light();
     void update(float time_elapsed);
     void draw(ICamera* cam);
+    void save(const std::string& filename);
 };
 

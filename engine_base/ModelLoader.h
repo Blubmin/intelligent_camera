@@ -3,6 +3,7 @@
 #include <map>
 #include <memory>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "Model.h"
@@ -14,7 +15,7 @@ class ModelLoader
     ~ModelLoader();
 
     std::string _folder;
-    std::map<std::string, Model*> models;
+    std::map<std::string, std::pair<Model*, std::string>> models;
     std::vector<std::string> _extensions;
 
     static ModelLoader* _instance;
@@ -24,5 +25,6 @@ public:
     static Model* loadModelByName(const std::string& filename, std::string key);
     static Model* getModelByName(std::string key);
     static std::vector<std::string> keys();
+    static std::string filename(const std::string& key);
 };
 
