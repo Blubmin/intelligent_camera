@@ -13,3 +13,8 @@ std::vector<std::string> split(const std::string& s, char delim) {
     }
     return tokens;
 }
+
+template<typename T, size_t N>
+int array_len(const T(&t)[N]) {
+    return sizeof(t) / sizeof(*t);
+}

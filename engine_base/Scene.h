@@ -1,9 +1,12 @@
 #pragma once
 
+#include <set>
 #include <string>
 #include <vector>
 
 #include <glm\glm.hpp>
+
+#define JSON_BUFFER_SIZE 65536
 
 class Entity;
 class ICamera;
@@ -15,6 +18,8 @@ class Scene {
     std::vector<ISystem*> _systems;
     IRenderer* _renderer;
     glm::vec3 _dir_light;
+    
+
 public:
     Scene();
     ~Scene();
@@ -26,5 +31,9 @@ public:
     void update(float time_elapsed);
     void draw(ICamera* cam);
     void save(const std::string& filename);
+    void import(const std::string& filename);
+    std::set<std::string> keys();
+
+    static char const * FilterPatterns[1];
 };
 

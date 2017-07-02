@@ -1,0 +1,166 @@
+{
+    "models": [
+        {
+            "key": "bush.obj",
+            "file": "C:\\Users\\Ian\\Documents\\Classwork\\Thesis\\intelligent_camera\\level_builder\\assets\\bush.obj"
+        },
+        {
+            "key": "floor.obj",
+            "file": "C:\\Users\\Ian\\Documents\\Classwork\\Thesis\\intelligent_camera\\level_builder\\assets\\floor.obj"
+        },
+        {
+            "key": "rock.obj",
+            "file": "C:\\Users\\Ian\\Documents\\Classwork\\Thesis\\intelligent_camera\\level_builder\\assets\\rock.obj"
+        },
+        {
+            "key": "tree.obj",
+            "file": "C:\\Users\\Ian\\Documents\\Classwork\\Thesis\\intelligent_camera\\level_builder\\assets\\tree.obj"
+        }
+    ],
+    "entities": [
+        {
+            "tag": "floor.obj",
+            "pos": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "rot": {
+                "phi": 0.0,
+                "theta": 0.0,
+                "psi": 0.0
+            },
+            "scale": {
+                "x": 500.0,
+                "y": 1.0,
+                "z": 500.0
+            }
+        },
+        {
+            "tag": "bush.obj",
+            "pos": {
+                "x": 3.200000047683716,
+                "y": 0.0,
+                "z": -3.9000000953674318
+            },
+            "rot": {
+                "phi": 0.0,
+                "theta": -0.6000000238418579,
+                "psi": 0.0
+            },
+            "scale": {
+                "x": 6.0,
+                "y": 6.0,
+                "z": 6.0
+            }
+        },
+        {
+            "tag": "tree.obj",
+            "pos": {
+                "x": 6.500000476837158,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "rot": {
+                "phi": 0.0,
+                "theta": 0.4000000059604645,
+                "psi": 0.0
+            },
+            "scale": {
+                "x": 10.0,
+                "y": 10.0,
+                "z": 10.0
+            }
+        },
+        {
+            "tag": "tree.obj",
+            "pos": {
+                "x": -0.20000000298023225,
+                "y": 0.0,
+                "z": 3.500000238418579
+            },
+            "rot": {
+                "phi": 0.0,
+                "theta": 0.6000000238418579,
+                "psi": 0.0
+            },
+            "scale": {
+                "x": 8.0,
+                "y": 8.0,
+                "z": 8.0
+            }
+        },
+        {
+            "tag": "tree.obj",
+            "pos": {
+                "x": -8.800000190734864,
+                "y": 0.0,
+                "z": 3.9000000953674318
+            },
+            "rot": {
+                "phi": 0.0,
+                "theta": -1.5000001192092896,
+                "psi": 0.0
+            },
+            "scale": {
+                "x": 10.0,
+                "y": 10.0,
+                "z": 10.0
+            }
+        },
+        {
+            "tag": "rock.obj",
+            "pos": {
+                "x": -4.5,
+                "y": -1.0,
+                "z": 0.0
+            },
+            "rot": {
+                "phi": 0.0,
+                "theta": 0.0,
+                "psi": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 5.0
+            }
+        },
+        {
+            "tag": "rock.obj",
+            "pos": {
+                "x": -3.500000238418579,
+                "y": 0.10000000149011612,
+                "z": -1.3000000715255738
+            },
+            "rot": {
+                "phi": 0.0,
+                "theta": -0.6000000238418579,
+                "psi": -1.5000001192092896
+            },
+            "scale": {
+                "x": 2.0,
+                "y": 2.0,
+                "z": 2.0
+            }
+        },
+        {
+            "tag": "rock.obj",
+            "pos": {
+                "x": -2.700000047683716,
+                "y": -1.100000023841858,
+                "z": 0.5
+            },
+            "rot": {
+                "phi": 0.0,
+                "theta": -6.700000286102295,
+                "psi": -0.30000001192092898
+            },
+            "scale": {
+                "x": 4.0,
+                "y": 4.0,
+                "z": 4.0
+            }
+        }
+    ]
+}

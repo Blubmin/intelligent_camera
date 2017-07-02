@@ -1,5 +1,6 @@
 #include <conio.h>
 #include <iostream>
+#include <map>
 #include <string.h>
 #include <vector>
 
@@ -42,8 +43,9 @@ int width = 1280;
 int height = 720;
 int dim = 100;
 
-vector<TextureRenderer*> models;
-vector<string> keys;
+map<std::string, TextureRenderer*> models;
+
+char const * filterPatterns[1] = { "*.obj" };
 
 static void error_callback(int error, const char* description) {
     fprintf(stderr, "Error: %s\n", description);
@@ -73,7 +75,7 @@ void render_model(const string& key) {
     scene.add_entity(EntityFactory::create_entity(key));
     tex->draw(&scene, &cam);
 
-    models.push_back(tex);
+    models[key] = tex;
     glClearColor(color[0], color[1], color[2], color[3]);
 }
 
@@ -133,10 +135,6 @@ void run() {
     //scene->add_entity(create_entity("rock", vec3(0, -1.0, 5), vec3(), vec3(3)));
     //scene->add_entity(create_entity("floor", vec3(), vec3(), vec3(100)));
 
-    keys = ModelLoader::keys();
-    for (auto k : keys) {
-        render_model(k);
-    }
     GLSL::check_gl_error("Render_Once");
     DebugRenderer* renderer = new DebugRenderer(texture->color(), vec2(width - (width / 3) - 1, 0), 0.3333f);
 
@@ -168,27 +166,46 @@ void run() {
 
         ImGui::Begin("Assets");
         ImGui::PushItemWidth(-1);
-        ImGui::ListBoxHeader("##", keys.size(), 30);
-        for (int i = 0; i < keys.size(); i++) {
-            if (ImGui::ImageButton((void*)(models[i]->color()), ImVec2(dim, dim), ImVec2(0, 1), ImVec2(1, 0), -1)) {
-                Entity* e = create_entity(keys[i].c_str(), vec3(), vec3(), vec3(1));
+        ImGui::ListBoxHeader("##", ModelLoader::keys().size(), 30);
+        for (auto k : ModelLoader::keys()) {
+            if (ImGui::ImageButton((void*)(models[k]->color()), ImVec2(dim, dim), ImVec2(0, 1), ImVec2(1, 0), -1)) {
+                Entity* e = create_entity(k.c_str(), vec3(), vec3(), vec3(1));
                 scene->add_entity(e);
                 selection->select(e);
             }
             ImGui::SameLine();
-            ImGui::TextWrapped(keys[i].c_str());
+            ImGui::TextWrapped(k.c_str());
         }
         ImGui::ListBoxFooter();
         ImGui::PushItemWidth(-1);
-        if (ImGui::Button("Import Model")) {
-            char const * filterPatterns[3] = { "*.obj" , "*.stl" , "*.dxf" };
-
-            const char* file = tinyfd_openFileDialog("Select a file", "", 1, filterPatterns, "model file", false);
+        if (ImGui::Button("Import models")) {
+            const char* file = tinyfd_openFileDialog("Select a file", "", array_len(filterPatterns), filterPatterns, NULL, true);
             if (file != NULL) {          
-                vector<string> path = split(string(file), '\\');
-                ModelLoader::loadModelByName(file, path.back());
-                render_model(path.back());
-                keys.push_back(path.back());
+                vector<string> files = split(file, '|');
+                for (auto f : files) {
+                    vector<string> path = split(string(f), '\\');
+                    ModelLoader::loadModelByName(f, path.back());
+                    render_model(path.back());
+                }            
+            }
+        }
+        if (ImGui::Button("Save to file")) {
+            const char* file = tinyfd_saveFileDialog("Save as", "untitled.scene", array_len(Scene::FilterPatterns), Scene::FilterPatterns, NULL);
+            if (file != NULL) {
+                scene->save(file);
+            }
+        }
+        if (ImGui::Button("Import from file")) {
+            const char* file = tinyfd_openFileDialog("Import scene", "", array_len(Scene::FilterPatterns), Scene::FilterPatterns, NULL, false);
+            if (file != NULL) {
+                scene->import(file);
+                models.clear();
+                for (const auto& k : ModelLoader::keys()) {
+                    render_model(k);
+                }
+                for (auto e : scene->entities()) {
+                    e->addComponent(new Selected());
+                }
             }
         }
         ImGui::End();
