@@ -1,5 +1,6 @@
 #include "ModelLoader.h"
 
+#include <fstream>
 #include <filesystem>
 #include <vector>
 
@@ -48,7 +49,7 @@ Model* ModelLoader::loadModelByName(const string& filename, string key)
         );
      
     Model* model = new Model(scene);
-    _instance->models[key] = model;
+    _instance->models[key] = pair<Model*, string>(model, filename);
     return model;
 }
 
@@ -65,12 +66,12 @@ Model* ModelLoader::getModelByName(string key)
                 if (f != fs::path(_instance->_folder + "/" + key + e)) continue;
 
                 loadModelByName(f.path().string(), key);
-                return _instance->models.at(key);
+                return _instance->models.at(key).first;
             }
         }
         return nullptr;
     }
-    return _instance->models.at(key);
+    return _instance->models.at(key).first;
 }
 
 std::vector<std::string> ModelLoader::keys() {
@@ -79,4 +80,9 @@ std::vector<std::string> ModelLoader::keys() {
         keys.push_back(p.first);
     }
     return keys;
+}
+
+string ModelLoader::filename(const string & key)
+{
+    return _instance->models[key].second;
 }
