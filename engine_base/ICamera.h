@@ -4,8 +4,8 @@
 
 class ICamera {
 public:
-    ICamera() {};
-    ~ICamera() {};
+    ICamera();
+    ~ICamera();
 
     virtual void update(float time_elapsed) = 0;
     virtual glm::mat4 getViewMatrix() = 0;

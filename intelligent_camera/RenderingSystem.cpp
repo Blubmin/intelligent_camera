@@ -10,6 +10,8 @@
 #include "engine_base\Rotation.h"
 #include "engine_base\Scale.h"
 
+#include <shaders/shaders.h>
+
 #include "Globals.h"
 #include "Player.h"
 #include "World.h"
@@ -24,9 +26,9 @@ RenderingSystem::RenderingSystem() {
         COMPONENT_ROTATION |
         COMPONENT_SCALE;
 
-    this->phong = Program("phong.vert", "phong.frag");
-    this->grid = Program("grid.vert", "grid.frag");
-    this->hull = Program("flat.vert", "flat.frag");
+    this->phong = Program(phong_vert_size, phong_vert, phong_frag_size, phong_frag);
+    this->grid = Program(grid_vert_size, grid_vert, grid_frag_size, grid_frag);
+    this->hull = Program(flat_vert_size, flat_vert, flat_frag_size, flat_frag);
     this->bindGrid();
     this->projection = perspective((float)radians(45.0), 1280.0f / 720, 0.1f, 800.f);
 }

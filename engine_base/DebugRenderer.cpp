@@ -7,13 +7,15 @@
 #include <glm\glm.hpp>
 #include <glm\gtc\type_ptr.hpp>
 
+#include <shaders/shaders.h>
+
 #include "Program.h"
 
 using namespace glm;
 using namespace std;
 
 DebugRenderer::DebugRenderer(GLuint texture, glm::vec2 pos, float scale) : IRenderer(0) {
-    _prog = new Program("debug.vert", "debug.frag");
+    _prog = new Program(debug_vert_size, debug_vert, debug_frag_size, debug_frag);
     _tex = texture;
 
     int width, height;

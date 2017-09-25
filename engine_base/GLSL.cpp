@@ -11,6 +11,7 @@
 
 #include "GLSL.h"
 
+#include <errno.h>
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
@@ -99,7 +100,7 @@ namespace GLSL {
         major = minor = 0;
         const char *verstr = (const char *)glGetString(GL_VERSION);
 
-        if ((verstr == NULL) || (sscanf_s(verstr, "%d.%d", &major, &minor) != 2)) {
+        if ((verstr == NULL) || (sscanf(verstr, "%d.%d", &major, &minor) != 2)) {
             printf("Invalid GL_VERSION format %d %d\n", major, minor);
         }
         if (major < 2) {
@@ -110,12 +111,11 @@ namespace GLSL {
 
     char *textFileRead(const char *fn)
     {
-        FILE *fp;
+        FILE *fp = fopen(fn, "rt");
         char *content = NULL;
         int count = 0;
-        if (fn != NULL) { 
-            errno_t err = fopen_s(&fp, fn, "rt");
-            if (err) { printf("error loading %s\n", fn); }
+        if (fn != NULL) {
+            if (errno) { printf("error loading %s\n", fn); }
             if (fp != NULL) {
                 fseek(fp, 0, SEEK_END);
                 count = (int)ftell(fp);
@@ -136,11 +136,10 @@ namespace GLSL {
 
     int textFileWrite(const char *fn, char *s)
     {
-        FILE *fp;
+        FILE *fp = fopen(fn, "w");
         int status = 0;
-        if (fn != NULL) { 
-            errno_t err = fopen_s(&fp, fn, "w");
-            if (err) { printf("error loading %s\n", fn); }
+        if (fn != NULL) {
+            if (errno) { printf("error loading %s\n", fn); }
             if (fp != NULL) {
                 if (fwrite(s, sizeof(char), strlen(s), fp) == strlen(s)) {
                     status = 1;

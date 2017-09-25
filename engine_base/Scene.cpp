@@ -71,8 +71,7 @@ void Scene::draw(ICamera* cam) {
 
 void Scene::save(const std::string & filename)
 {
-    FILE* fp;
-    fopen_s(&fp, filename.c_str(), "w");
+    FILE* fp = fopen(filename.c_str(), "w");
 
     char writeBuffer[JSON_BUFFER_SIZE];
     FileWriteStream os(fp, writeBuffer, sizeof(writeBuffer));
@@ -137,8 +136,7 @@ void Scene::save(const std::string & filename)
 }
 
 void Scene::import(const std::string & filename) {
-    FILE* fp;
-    fopen_s(&fp, filename.c_str(), "r");
+    FILE* fp = fopen(filename.c_str(), "r");
 
     char readBuffer[JSON_BUFFER_SIZE];
     FileReadStream is(fp, readBuffer, sizeof(readBuffer));

@@ -1,0 +1,35 @@
+add_executable(intelligent_camera
+  BlenderCamera.cpp
+  BlenderCamera.h
+  BoidSystem.cpp
+  BoidSystem.h
+  Camera.cpp
+  Camera.h
+  DebugCamera.cpp
+  DebugCamera.h
+  EntityFactory.cpp
+  EntityFactory.h
+  Globals.h
+  main.cpp
+  Player.cpp
+  Player.h
+  PlayerMovementSystem.cpp
+  PlayerMovementSystem.h
+  QuickHull.cpp
+  QuickHull.h
+  RenderingSystem.cpp
+  RenderingSystem.h
+  SplineCamera.cpp
+  SplineCamera.h
+  World.cpp
+  World.h
+)
+
+target_link_libraries(intelligent_camera
+  engine_base
+  GL
+  glew
+  glfw
+  glog::glog
+  shaders
+)

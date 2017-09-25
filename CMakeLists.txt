@@ -3,38 +3,30 @@ include(ExternalProject)
 
 project(intelligent_camera
   VERSION 1.0.0
-  LANGUAGES CXX
+  LANGUAGES C CXX
 )
 
-find_package(GLEW REQUIRED)
-if (GLEW_FOUND)
-  include_directories(${GLEW_INCLUDE_DIRS})
+# find_package(GLEW REQUIRED)
+# if (GLEW_FOUND)
+#   include_directories(${GLEW_INCLUDE_DIRS})
 
-  # add_library(glew STATIC IMPORTED)
-  # set_target_properties(glew
-  #   PROPERTIES
-  #     IMPORTED_LOCATION ${GLEW_LIBRARY}
-  # )
-  link_libraries(${GLEW_LIBRARIES})
-endif()
-
-find_package(assimp REQUIRED)
-include_directories("/include")
-# if (assimp_FOUND)
-# message(STATUS "Assimp include dir: ${ASSIMP_LIBRARIES}")
-#   include_directories(${ASSIMP_INCLUDE_DIRS})
-#   link_libraries(${ASSIMP_LIBRARIES})
+#   add_library(glew STATIC IMPORTED)
+#   set_target_properties(glew
+#     PROPERTIES
+#       IMPORTED_LOCATION ${GLEW_LIBRARIES}
+#   )
 # endif()
 
-# find_package(assimp REQUIRED)
-# if (assimp_FOUND)
-#   include_directories(${Assimp_INCLUDE_DIRS})
-#   link_libraries(${Assimp_LIBRARY})
-# endif()
+find_package(assimp REQUIRED) # target link assimp
+find_package(gflags REQUIRED)
+find_package(glfw3 REQUIRED) # target link glfw
+find_package(glog REQUIRED) # target link glog::glog
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-include_directories(${CMAKE_CURRENT_BINARY_DIR})
 include_directories(third_party)
 
 add_subdirectory(third_party)
 add_subdirectory(engine_base)
+add_subdirectory(intelligent_camera)
+add_subdirectory(level_builder)
+add_subdirectory(shaders)

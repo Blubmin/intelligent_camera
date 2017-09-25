@@ -9,8 +9,6 @@ add_library(engine_base
   Entity.cpp
   EntityFactory.h
   EntityFactory.cpp
-  ExceptionWrapper.h
-  ExceptionWrapper.cpp
   FlatRenderer.h
   FlatRenderer.cpp
   GLSL.h
@@ -49,12 +47,13 @@ add_library(engine_base
 )
 
 target_link_libraries(engine_base
-  # ${assimp}
-  # ${glew_LIBRARY}
+  assimp
+  boost_filesystem
+  boost_system
+  GL
+  glew
+  glfw
+  glog::glog
   imgui
+  shaders
 )
-
-# add_dependencies(engine_base
-# project_assimp
-#   glm
-# )

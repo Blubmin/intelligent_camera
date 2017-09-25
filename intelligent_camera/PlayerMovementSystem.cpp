@@ -18,8 +18,7 @@ PlayerMovementSystem::PlayerMovementSystem() {}
 
 PlayerMovementSystem::PlayerMovementSystem(string filename) {
     this->mask = COMPONENT_POSITION | COMPONENT_PLAYER;
-    FILE* fp;
-    fopen_s(&fp, filename.c_str(), "r");
+    FILE* fp = fopen(filename.c_str(), "r");
     FileReadStream is = FileReadStream(fp, this->buffer, JSON_BUFFER_SIZE);
     //ifstream file;
     //file.open(filename);

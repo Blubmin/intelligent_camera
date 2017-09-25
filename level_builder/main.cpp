@@ -1,4 +1,3 @@
-#include <conio.h>
 #include <iostream>
 #include <map>
 #include <string.h>
@@ -9,6 +8,8 @@
 #include <glm\glm.hpp>
 #include <glm\gtc\type_ptr.hpp>
 
+#include <glog/logging.h>
+
 #include <imgui\imgui.h>
 
 #include <tinyfiledialogs\tinyfiledialogs.h>
@@ -17,7 +18,6 @@
 #include <engine_base\DebugRenderer.h>
 #include <engine_base\Entity.h>
 #include <engine_base\EntityFactory.h>
-#include <engine_base\ExceptionWrapper.h>
 #include <engine_base\FlatRenderer.h>
 #include <engine_base\GLSL.h>
 #include <engine_base\Input.h>
@@ -83,16 +83,16 @@ void run() {
     glfwSetErrorCallback(error_callback);
 
     if (!glfwInit()) {
-        throw_exception(runtime_error("glfwInit failed"));
+        LOG(ERROR) << "glfwInit failed" << std::endl;
     }
 
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    // glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     GLFWwindow* window = glfwCreateWindow(width, height, "Level Builder", NULL, NULL);
     if (!window) {
         glfwTerminate();
-        throw_exception(runtime_error("glfwCreateWindow failed"));
+        LOG(ERROR) << "glfwCreateWindow failed" << std::endl;
     }
 
     //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -103,7 +103,7 @@ void run() {
     // initialize GLEW
     glewExperimental = GL_TRUE;
     if (glewInit() != GLEW_OK)
-        throw_exception(runtime_error("glewInit failed"));
+        LOG(ERROR) << "glewInit failed" << std::endl;
 
     // GLEW throws some errors, so discard all the errors so far
     while (glGetError() != GL_NO_ERROR) {}
@@ -242,7 +242,7 @@ int main(int argc, char** argv) {
         char temp;
         cerr << e.what() << endl;
         cerr << "Press anything to quit..." << endl;
-        _getch();
+        getchar();
         exit(EXIT_FAILURE);
     }
 

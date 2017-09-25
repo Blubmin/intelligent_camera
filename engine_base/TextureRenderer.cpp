@@ -3,7 +3,7 @@
 #include <GL\glew.h>
 #include <GLFW\glfw3.h>
 
-#include <engine_base\GLSL.h>
+#include "GLSL.h"
 
 TextureRenderer::TextureRenderer(IRenderer * renderer, int width, int height) : IRenderer(0) {
     _child = renderer;

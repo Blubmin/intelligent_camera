@@ -16,12 +16,14 @@
 #include "Scale.h"
 #include "Scene.h"
 
+#include <shaders/shaders.h>
+
 using namespace glm;
 
 FlatRenderer::FlatRenderer() :
     IRenderer(COMPONENT_MODEL | COMPONENT_POSITION | COMPONENT_ROTATION | COMPONENT_SCALE)
 {
-    _prog = new Program("flat.vert", "flat.frag");
+    _prog = new Program(flat_vert_size, flat_vert, flat_frag_size, flat_frag);
 }
 
 FlatRenderer::~FlatRenderer() {

@@ -1,6 +1,7 @@
 #include "Program.h"
 
-#include "ExceptionWrapper.h"
+#include <glog/logging.h>
+
 #include "GLSL.h"
 
 using namespace GLSL;
@@ -16,12 +17,12 @@ Program::Program(const std::string & vertexShader, const std::string & fragShade
     GLint rc = 0;
 
     // Compiling the vertex shader
-    this->vert = compileShader(vertexShader, GL_VERTEX_SHADER, &rc);
-    if (!rc) throw_exception(runtime_error("Error compiling vertex shader: " + vertexShader));
+    this->vert = compileShader(textFileRead(vertexShader.c_str()), NULL, GL_VERTEX_SHADER, &rc);
+    if (!rc) LOG(ERROR) << "Error compiling vertex shader: " << vertexShader << std::endl;
 
     // Compiling the fragment shader
-    this->frag = compileShader(fragShader, GL_FRAGMENT_SHADER, &rc);
-    if (!rc) throw_exception(runtime_error("Error compiling fragment shader: " + fragShader));
+    this->frag = compileShader(textFileRead(fragShader.c_str()), NULL, GL_FRAGMENT_SHADER, &rc);
+    if (!rc) LOG(ERROR) << "Error compiling fragment shader: " << fragShader << std::endl;
 
     // Creating the program and linking shaders
     this->prog = glCreateProgram();
@@ -33,7 +34,35 @@ Program::Program(const std::string & vertexShader, const std::string & fragShade
     printError();
     glGetProgramiv(this->prog, GL_LINK_STATUS, &rc);
     printProgramInfoLog(this->prog);
-    if (!rc) throw_exception(runtime_error("Error linking shaders " + vertexShader + " and " + fragShader));
+    if (!rc) LOG(ERROR) << "Error linking shaders " << vertexShader << " and " << fragShader << std::endl;
+
+    // Sets up uniform/attribute handles
+    setupHandles();
+}
+
+Program::Program(GLuint vert_size, const GLchar* vert_buffer, GLuint frag_size, const GLchar* frag_buffer) {
+   // Stores error code
+   GLint rc = 0;
+
+    // Compiling the vertex shader
+    this->vert = compileShader(vert_buffer, (GLint*) &vert_size, GL_VERTEX_SHADER, &rc);
+    if (!rc) LOG(ERROR) << "Error compiling vertex shader." << std::endl;
+
+    // Compiling the fragment shader
+    this->frag = compileShader(frag_buffer, (GLint*) &frag_size, GL_FRAGMENT_SHADER, &rc);
+    if (!rc) LOG(ERROR) << "Error compiling fragment shader." << std::endl;
+
+    // Creating the program and linking shaders
+    this->prog = glCreateProgram();
+    glAttachShader(this->prog, this->vert);
+    glAttachShader(this->prog, this->frag);
+    glLinkProgram(this->prog);
+
+    // Checking for errors
+    printError();
+    glGetProgramiv(this->prog, GL_LINK_STATUS, &rc);
+    printProgramInfoLog(this->prog);
+    if (!rc) LOG(ERROR) << "Error linking shaders." << std::endl;
 
     // Sets up uniform/attribute handles
     setupHandles();
@@ -43,11 +72,9 @@ Program::~Program()
 {
 }
 
-GLuint Program::compileShader(const std::string& file, GLenum shaderType, GLint* rc)
-{
+GLuint Program::compileShader(const GLchar *contents, const GLint* length, GLenum shaderType, GLint* rc) {
     GLuint shader = glCreateShader(shaderType);
-    const char *contents = textFileRead(file.c_str());
-    glShaderSource(shader, 1, &contents, NULL);
+    glShaderSource(shader, 1, &contents, length);
     glCompileShader(shader);
     printError();
     glGetShaderiv(shader, GL_COMPILE_STATUS, rc);
@@ -97,7 +124,7 @@ GLint Program::getAttributeHandle(string name)
     }
     catch (exception& e)
     {
-        throw_exception(runtime_error("The attribute name '" + name + "' is not bound to this program."));
+        LOG(ERROR) << "The attribute name '" << name << "' is not bound to this program." << std::endl;
     }
     return handle;
 }
@@ -111,7 +138,7 @@ GLint Program::uniform(string name)
     }
     catch (exception& e)
     {
-        throw_exception(runtime_error("The uniform name '" + name + "' is not bound to this program."));
+        LOG(ERROR) << "The uniform name '" << name << "' is not bound to this program." << std::endl;
     }
     return handle;
 }

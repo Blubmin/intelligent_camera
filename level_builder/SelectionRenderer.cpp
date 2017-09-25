@@ -16,6 +16,8 @@
 #include <engine_base\Scale.h>
 #include <engine_base\Scene.h>
 
+#include <shaders/shaders.h>
+
 #include "Selected.h"
 
 using namespace glm;
@@ -26,8 +28,8 @@ SelectionRenderer::SelectionRenderer() : IRenderer(COMPONENT_MODEL |
                                                    COMPONENT_ROTATION | 
                                                    COMPONENT_SCALE | 
                                                    COMPONENT_SELECTED) {
-    _prog = new Program("flat.vert", "flat.frag");
-    _prog_outline = new Program("outline.vert", "outline.frag");
+    _prog = new Program(flat_vert_size, flat_vert, flat_frag_size, flat_frag);
+    _prog_outline = new Program(outline_vert_size, outline_vert, outline_frag_size, outline_frag);
 }
 
 

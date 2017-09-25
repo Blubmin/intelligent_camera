@@ -1,0 +1,19 @@
+add_executable(level_builder
+  BlenderCamera.cpp
+  BlenderCamera.h
+  IndexRenderer.cpp
+  IndexRenderer.h
+  main.cpp
+  Selected.cpp
+  Selected.h
+  SelectionRenderer.cpp
+  SelectionRenderer.h
+  SelectionSystem.cpp
+  SelectionSystem.h
+)
+
+target_link_libraries(level_builder
+  engine_base
+  shaders
+  tinyfiledialogs
+)

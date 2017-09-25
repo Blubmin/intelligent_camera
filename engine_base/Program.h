@@ -10,6 +10,7 @@ class Program
 public:
     Program();
     Program(const std::string& vertexShader, const std::string& fragShader);
+    Program(GLuint vert_size, const GLchar* vert_buffer, GLuint frag_size, const GLchar* frag_buffer);
     ~Program();
 
     GLint getAttributeHandle(std::string name);
@@ -22,7 +23,6 @@ public:
     std::map<std::string, GLuint> uniforms;
 
 private:
-    GLuint compileShader(const std::string & file, GLenum shaderType, GLint* rc);
+    GLuint compileShader(const GLchar *contents, const GLint* length, GLenum shaderType, GLint* rc);
     void setupHandles();
 };
-

@@ -1,18 +1,18 @@
 #include "ModelLoader.h"
 
 #include <fstream>
-#include <filesystem>
 #include <vector>
 
 #include <assimp\Importer.hpp>
 #include <assimp\scene.h>
 #include <assimp\postprocess.h>
+#include <boost\filesystem.hpp>
 #include <glm\glm.hpp>
 
 using namespace std;
 using namespace glm;
 
-namespace fs = std::experimental::filesystem;
+namespace fs = boost::filesystem;
 
 ModelLoader* ModelLoader::_instance = nullptr;
 
